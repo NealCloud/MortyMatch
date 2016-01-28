@@ -103,9 +103,9 @@ body{
 }
 
 /*.back img{*/
-    /*transition-duration: 1s;*/
+    /*transition-duration: .5s;*/
 /*}*/
 /*.front img{*/
-    /*transition-duration: 1s;*/
+    /*transition-duration: .5s;*/
     /*transform : rotateY(90deg);*/
 /*}*/
