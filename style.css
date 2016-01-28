@@ -5,6 +5,13 @@ body{
     margin: auto;
     background: #162929 url("image/background1.png") no-repeat fixed center;
 }
+.win{
+    color: gold;
+    font-family: 'Margarine', cursive;
+    font-size: 120px;
+    margin: -9px 140px 0 0;
+    text-transform: capitalize;
+}
 /*header items*/
 .header{
     height: 10vh;
@@ -57,9 +64,7 @@ body{
     color: #00E2E2;
     height: 80vh;
 }
-.game{
-    border: 3px solid black;
-}
+
 #game-area{
     display: flex;
     flex-flow: row wrap;
