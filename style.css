@@ -3,8 +3,11 @@ body{
     box-sizing: border-box;
     max-width: 1000px;
     margin: auto;
+}
+.morty-bg{
     background: #162929 url("image/background1.png") no-repeat fixed center;
 }
+
 .win{
     color: gold;
     font-family: 'Margarine', cursive;
@@ -77,6 +80,7 @@ body{
 /*card items*/
 .card{
     display: inline-block;
+    /*6 cards with 3 rows*/
     width: 15%;
     height: 23%;
     position: relative;
@@ -101,11 +105,11 @@ body{
     height: 100%;
     width: 100%;
 }
-
-/*.back img{*/
-    /*transition-duration: .5s;*/
-/*}*/
-/*.front img{*/
-    /*transition-duration: .5s;*/
-    /*transform : rotateY(90deg);*/
-/*}*/
+/*for card flip transition targets the img element directly*/
+.flip{
+    transition-duration: .5s;
+}
+.flip{
+    transition-duration: .5s;
+    transform : rotateY(90deg);
+}

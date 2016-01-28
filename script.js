@@ -1,5 +1,9 @@
 $(document).ready(function() {
-    console.log("working");
+
+
+
+
+
     new MatchHandler().createCards();
 });
 
