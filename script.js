@@ -1,11 +1,15 @@
 $(document).ready(function() {
 
-    for(var i = 1; i < 10; i++){
+
+    var rpics = randomMorty();
+    console.log(rpics);
+
+    for(var i = 0; i < 9; i++){
         for(var j = 0; j < 2; j++) {
             var cardcontain = $("<div>", {
                 class: "card",
                 html: " <div class='front'>" +
-                            "<img src='image/morty" + i + ".png' alt='cardfront3'>" +
+                            "<img src='image/morty" + rpics.pop() + ".png' alt='cardfront'>" +
                         "</div>" +
                         "<div class='back'> " +
                              "<img src='image/cardback.png' alt='cardback'>" +
@@ -14,8 +18,23 @@ $(document).ready(function() {
             $(cardcontain).appendTo("#game-area");
         }
     }
+
+    function randomMorty(){
+        var pics = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9];
+        var randompic = [];
+        var len = pics.length;
+        for(var i = 0; i < len; i++){
+            var newlen = pics.length;
+            var rando = Math.floor(Math.random() * newlen);
+            var temp = ((pics.splice(rando,1)));
+            randompic.push(temp[0]);
+        }
+        return randompic;
+    }
     new MatchHandler().createCards();
 });
+
+
 
 function Match() {
     var id = null;
