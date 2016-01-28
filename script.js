@@ -1,9 +1,19 @@
 $(document).ready(function() {
 
-
-
-
-
+    for(var i = 1; i < 10; i++){
+        for(var j = 0; j < 2; j++) {
+            var cardcontain = $("<div>", {
+                class: "card",
+                html: " <div class='front'>" +
+                            "<img src='image/morty" + i + ".png' alt='cardfront3'>" +
+                        "</div>" +
+                        "<div class='back'> " +
+                             "<img src='image/cardback.png' alt='cardback'>" +
+                        "</div>"
+            });
+            $(cardcontain).appendTo("#game-area");
+        }
+    }
     new MatchHandler().createCards();
 });
 
