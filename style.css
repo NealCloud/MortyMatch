@@ -1,7 +1,7 @@
 
 body{
     box-sizing: border-box;
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
     background: #162929 url("image/background1.png") no-repeat fixed center;
 }
@@ -15,7 +15,6 @@ body{
 .logo{
     width: 20%;
     background-size: 100% 100%;
-
 }
 .logo img{
     width: 100%;
@@ -61,7 +60,7 @@ body{
 .game{
     border: 3px solid black;
 }
-.game-area{
+#game-area{
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -96,7 +95,6 @@ body{
     position: absolute;
     height: 100%;
     width: 100%;
-
 }
 
 /*.back img{*/
