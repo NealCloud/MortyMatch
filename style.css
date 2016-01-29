@@ -16,10 +16,11 @@ body{
     cursor: pointer;
     outline: none;
     color: #00E2E2;
+    border: 1px solid black;
     background-color: #162929;
-    border: none;
+
     border-radius: 15px;
-    box-shadow: 0 9px #000000;
+    box-shadow: 0 3px #000000;
 }
 
 .reset:hover {background-color: #2754bc
@@ -27,7 +28,7 @@ body{
 
 .reset:active {
     background-color: #2754bc;
-    box-shadow: 0 5px #000;
+    box-shadow: 0 0px #000;
     transform: translateY(4px);
 }
 
@@ -89,6 +90,11 @@ a{
     width: 20%;
 
     height: 80vh;
+}
+.stats-area div{
+    height: auto;
+    width: 100%;
+    text-align: center;
 }
 
 #game-area{
