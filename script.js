@@ -98,20 +98,18 @@ Game = {
     },
     //animate an elements sibling
     animate: function(element){
-        $(element).siblings(".front").animate({width: "0%"}, 500).fadeOut(500);
-        $(Data.firstcardid).siblings(".front").animate({width: "0%"}, 500).fadeOut(500);
+        $(element).siblings(".front").animate({bottom: "-=200px"}, 800).fadeOut(800);
+        $(Data.firstcardid).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
     },
     // reset the card click and id values
     resetDataFlags: function(){
         Data.second_card_clicked = null;
         Data.firstcardid = null;
         Data.first_card_clicked = null;
-
     },
     //Below is for creating cards dynamically ignore
     //creates and appends 18 divs with html and img src that uses a random order array from randomMorty
     createMorty : function(picIdarray) {
-
         if(picIdarray){
             Game.dynamicMorty(picIdarray);
         }
@@ -138,7 +136,8 @@ Game = {
         }
     },
     //returns an array of predefined numbers in a random order;
-    randomMorty: function(){
+    randomMorty: function(num){
+        
         var pics = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9];
         return pics;
         var randomnums = [];
