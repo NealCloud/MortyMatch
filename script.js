@@ -4,7 +4,7 @@
 $(document).ready(function() {
     // initialize game creating the board game with a randomly generated cardset or
 
-    Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+    //Data.mortyInit = Game.randomMorty(Data.totalCards/2);
     Game.createMortyMatch(Data.mortyInit);
     //create a click event on all card backs
     Game.btnMaker();
