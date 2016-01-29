@@ -181,7 +181,7 @@ Game = {
             pics.push(i);
         }
         //remove to have random card placement
-        return pics;
+        //return pics;
         var randomnums = [];
         var picslen = pics.length;
         for(var i = 0; i < picslen; i++){
