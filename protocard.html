@@ -9,7 +9,6 @@
         var secondcard = false;
         var firstcardid = null;
 
-
         $(document).ready(function(){
             $(".card").click(function(){
                 if(play){
@@ -19,7 +18,7 @@
         })
 
         function flipCard(targ, card2){
-            console.log(card2);
+            //console.log(card2);
             if(!card2){
                 $(targ).find(".back").addClass("flipback");
                 firstcardid = targ;
@@ -28,18 +27,18 @@
             else{
                 play = false;
                 $(targ).find(".back").addClass("flipback");
+                console.log($(targ).find("img").attr("src") == $(firstcardid).find("img").attr("src"));
 
                 setTimeout(function(){
                     $(targ).find(".back").removeClass("flipback");
                     $(firstcardid).find(".back").removeClass("flipback");
-                    play = true;
                     firstcardid = null;
                     secondcard = false;
+
+                    play = true;
                 }, 1500);
             }
         }
-
-
 
     </script>
     <style>
@@ -60,7 +59,7 @@
             top:0;
             left: 0;
             width: 100%;
-            height: auto;
+            height: 100%;
             transition-duration: 1s;
         }
 
@@ -90,7 +89,7 @@
     </div>
     <div class="card">
         <div class="front">
-            <img src="image/morty1.png" alt="">
+            <img src="image/morty2.png" alt="">
         </div>
         <div class="back">
             <img src="image/cardback.png" alt="">

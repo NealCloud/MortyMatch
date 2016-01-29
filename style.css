@@ -9,6 +9,28 @@ body{
     background: #162929 url("image/background1.png") no-repeat fixed center;
 }
 
+.reset {
+    padding: 15px 15px;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #00E2E2;
+    background-color: #162929;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #000000;
+}
+
+.reset:hover {background-color: #2754bc
+}
+
+.reset:active {
+    background-color: #2754bc;
+    box-shadow: 0 5px #000;
+    transform: translateY(4px);
+}
+
 .win{
     color: #00F100;
     font-family: 'Margarine', cursive;
