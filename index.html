@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Morty Match</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Margarine' rel='stylesheet' type='text/css'>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script src="script.js"></script>
+    <script>
+        //card flip animation for later use;
+//        $(document).ready(function () {
+//            $(".card").on("click", function(){
+//                cardFlip(this);
+//            });
+//        });
+//        function cardFlip(element){
+//            element.children[1].children[0].style.transform = "rotateY(90deg)";
+//            setTimeout( function(){ element.children[0].children[0].style.transform = "rotateY(180deg)";}, 1000);
+//        }
+    </script>
+</head>
+<body class="morty-bg">
+    <!--Flexbox -> Logo / Title / Navbar -->
+    <header class="header">
+        <div class="logo"><img src="image/logo.png" alt=""></div>
+        <h1 class="title">Morty Match</h1>
+        <nav class="navbar">
+            <ul>
+                <li> <a href="#">Settings</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<div class="main-area">
+    <!--Stats Side bar-->
+    <div class="stats-area">
+        <h2>Stats</h2>
+
+        <div class="games-played">
+            <div class="label">Games Played</div>
+            <p class="value"></p>
+        </div>
+
+        <div class="attempts">
+            <div class="label">Attempts</div>
+            <p class="value"></p>
+        </div>
+
+        <div class="accuracy">
+            <div class="label">Accuracy</div>
+            <p class="value"></p>
+        </div>
+
+        <button class="reset">Reset Game</button>
+
+    </div>
+    <!--Game Area-->
+    <div id="game-area">
+        <!--6 cards by 3 rows-->
+        <!--cards created in jquery-->
+       <!-- <div class="card">
+            <div class="front">
+                <img src="image/morty1.png" alt="cardfront1">
+            </div>
+            <div class="back">
+                <img src="image/cardback.png" alt="cardback">
+            </div>
+        </div>
+        <div class="card">
+            <div class="front">
+                <img src="image/morty1.png" alt="cardfront1">
+            </div>
+            <div class="back">
+                <img src="image/cardback.png" alt="cardback">
+            </div>
+        </div>-->
+
+</div>
+</body>
+</html>
