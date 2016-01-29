@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <title>Title</title>
+    <script>
+        var play = true;
+        var secondcard = false;
+        var firstcardid = null;
+
+        $(document).ready(function(){
+            $(".card").click(function(){
+                if(play){
+                    flipCard(this, secondcard);
+                }
+            })
+        })
+
+        function flipCard(targ, card2){
+            //console.log(card2);
+            if(!card2){
+                $(targ).find(".back").addClass("flipback");
+                firstcardid = targ;
+                secondcard = true;
+            }
+            else{
+                play = false;
+                $(targ).find(".back").addClass("flipback");
+                console.log($(targ).find("img").attr("src") == $(firstcardid).find("img").attr("src"));
+
+                setTimeout(function(){
+                    $(targ).find(".back").removeClass("flipback");
+                    $(firstcardid).find(".back").removeClass("flipback");
+                    firstcardid = null;
+                    secondcard = false;
+
+                    play = true;
+                }, 1500);
+            }
+        }
+
+    </script>
+    <style>
+        .card{
+            position: relative;
+            height: 100px;
+            width: 100px;
+            margin: 100px;
+        }
+        .front, .back{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+        }
+
+        .card div img{
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition-duration: 1s;
+        }
+
+        .front{
+            ktransform: rotateY(90deg);
+        }
+
+        .flipback{
+            transform: rotateX(90deg);
+            transform-style: preserve-3d;
+            transition: transform .10s linear;
+        }
+        .flip2{
+            transform: rotateY(90deg);
+            transition-duration: 1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="front">
+            <img src="image/morty1.png" alt="">
+        </div>
+        <div class="back">
+            <img src="image/cardback.png" alt="">
+        </div>
+    </div>
+    <div class="card">
+        <div class="front">
+            <img src="image/morty2.png" alt="">
+        </div>
+        <div class="back">
+            <img src="image/cardback.png" alt="">
+        </div>
+    </div>
+    <div class="card">
+        <div class="front">
+            <img src="image/morty1.png" alt="">
+        </div>
+        <div class="back">
+            <img src="image/cardback.png" alt="">
+        </div>
+    </div>
+
+</body>
+</html>

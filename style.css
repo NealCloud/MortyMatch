@@ -1,0 +1,149 @@
+/*   color palette used http://paletton.com/#uid=53i0u0kllll5c31er8wsfBwLsRY    */
+body{
+    box-sizing: border-box;
+    max-width: 1000px;
+    margin: auto;
+    color: #00E2E2;
+}
+.morty-bg{
+    background: #162929 url("image/background1.png") no-repeat fixed center;
+}
+
+.reset {
+    padding: 15px 15px;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #00E2E2;
+    background-color: #162929;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #000000;
+}
+
+.reset:hover {background-color: #2754bc
+}
+
+.reset:active {
+    background-color: #2754bc;
+    box-shadow: 0 5px #000;
+    transform: translateY(4px);
+}
+
+.win{
+    color: #00F100;
+    font-family: 'Margarine', cursive;
+    font-size: 120px;
+    margin: -9px 140px 0 0;
+    text-transform: capitalize;
+}
+/*header items*/
+.header{
+    height: 10vh;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 30px;
+}
+.logo{
+    width: 20%;
+    background-size: 100% 100%;
+}
+.logo img{
+    width: 100%;
+    height: 100%;
+    animation: spin 15s infinite linear;
+}
+@keyframes spin{
+    0%{-webkit-transform:rotate(0deg);transform: rotate(0deg)}
+    100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}
+}
+.navbar{
+    width: 20%;
+}
+.navbar ul li{
+    display: inline-block;
+}
+a{
+    text-decoration: none;
+    color: #00F100;
+}
+.title{
+    width: 60%;
+    text-align: center;
+    font-family: 'Margarine', cursive;
+    font-size: 50px;
+    color: #00E2E2;
+}
+/*main game items*/
+.main-area{
+    display: flex;
+    flex-flow: row nowrap;
+}
+.stats-area{
+    display: flex;
+    flex-flow: column wrap;
+    margin-top: 7%;
+    justify-content: flex-start;
+    align-items: center;
+    width: 20%;
+
+    height: 80vh;
+}
+
+#game-area{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    width: 80%;
+    height: 80vh;
+}
+/*card items*/
+.card{
+    display: inline-block;
+    /*6 cards with 3 rows*/
+    width: 15%;
+    height: 23%;
+    position: relative;
+    margin: 5px;
+    overflow: hidden;
+}
+.card div img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+
+.front, .back{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+/*for card flip transition targets the img element directly*/
+.flip{
+    transition-duration: .5s;
+}
+.flip{
+    transition-duration: .5s;
+    transform : rotateY(90deg);
+}
+
+/*about page css*/
+.about-page{
+    background-color: #2E2472 ;
+}
+
+.me{
+    width: 200px;
+    height: 200px;
+}
+.me img{
+    height: 100%;
+    width: 100%;
+}
