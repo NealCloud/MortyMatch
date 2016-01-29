@@ -1,39 +1,41 @@
 $(document).ready(function() {
+    // randomize an array of picture numbers and appends cards to game area;
+    // reset button doesn't rerandomize yet;
+    var mortypics = randomMorty();
+    createMorty(mortypics);
 
+    new MatchHandler().createCards();
+});
 
-    var rpics = randomMorty();
-    console.log(rpics);
-
-    for(var i = 0; i < 9; i++){
-        for(var j = 0; j < 2; j++) {
+function createMorty(rpics) {
+    for (var i = 0; i < 9; i++) {
+        for (var j = 0; j < 2; j++) {
             var cardcontain = $("<div>", {
                 class: "card",
                 html: " <div class='front'>" +
-                            "<img src='image/morty" + rpics.pop() + ".png' alt='cardfront'>" +
-                        "</div>" +
-                        "<div class='back'> " +
-                             "<img src='image/cardback.png' alt='cardback'>" +
-                        "</div>"
+                "<img src='image/morty" + rpics.pop() + ".png' alt='cardfront'>" +
+                "</div>" +
+                "<div class='back'> " +
+                "<img src='image/cardback.png' alt='cardback'>" +
+                "</div>"
             });
             $(cardcontain).appendTo("#game-area");
         }
     }
+}
 
-    function randomMorty(){
-        var pics = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9];
-        var randompic = [];
-        var len = pics.length;
-        for(var i = 0; i < len; i++){
-            var newlen = pics.length;
-            var rando = Math.floor(Math.random() * newlen);
-            var temp = ((pics.splice(rando,1)));
-            randompic.push(temp[0]);
-        }
-        return randompic;
+function randomMorty(){
+    var pics = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9];
+    var randompic = [];
+    var len = pics.length;
+    for(var i = 0; i < len; i++){
+        var newlen = pics.length;
+        var rando = Math.floor(Math.random() * newlen);
+        var temp = ((pics.splice(rando,1)));
+        randompic.push(temp[0]);
     }
-    new MatchHandler().createCards();
-});
-
+    return randompic;
+}
 
 
 function Match() {
@@ -122,13 +124,14 @@ function MatchHandler() {
     self.numToCreate = false;
 
     self.winCallback = function(mhandler){
-        $(mhandler.gameArea.containerSelector).append($("<h1>").html("You win").attr('class', 'win'));
+        $(mhandler.gameArea.containerSelector).append($("<h1>").html("You Collected all the Mortys").attr('class', 'win'));
         $(mhandler.gameArea.containerSelector).find('.card').hide();
     };
 
     self.resetObj = {
         selector:".reset",
         callback:function(){
+
             $(self.gameArea.containerSelector).find('h1').remove();
         }
     };

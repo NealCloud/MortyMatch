@@ -96,12 +96,9 @@ a{
     width: 100%;
     border-radius: 10px;
 }
-.front {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-}
-.back{
+
+
+.front, .back{
     position: absolute;
     height: 100%;
     width: 100%;
