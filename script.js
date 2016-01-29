@@ -14,6 +14,7 @@ $(document).ready(function() {
 });
 
 var play = true;
+var score = 0;
 var secondcard = false;
 var firstcardid = null;
 
@@ -57,14 +58,28 @@ function flipCard(targ, card2){
     else{
         play = false;
         $(targ).find(".back").addClass("flip");
-        console.log($(targ).find("img").attr("src") == $(firstcardid).find("img").attr("src"));
+        if($(targ).find("img").attr("src") != $(firstcardid).find("img").attr("src")){
+            setTimeout(function(){
+                $(targ).find(".back").removeClass("flip");
+                $(firstcardid).find(".back").removeClass("flip");
+                firstcardid = null;
+                secondcard = false;
+                play = true;
+            }, 500);
+        }
+        else{
+            if(score == 8){
+                $("#game-area").append($("<h1>").html("You win").addClass('win'));
+                console.log("you win");
+            }
+            else{
+                score++;
+                firstcardid = null;
+                secondcard = false;
+                play = true;
+            }
 
-        setTimeout(function(){
-            $(targ).find(".back").removeClass("flip");
-            $(firstcardid).find(".back").removeClass("flip");
-            firstcardid = null;
-            secondcard = false;
-            play = true;
-        }, 1500);
+        }
+
     }
 }
