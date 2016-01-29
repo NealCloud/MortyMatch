@@ -27,11 +27,14 @@ Data = {
 Game = {
     //assign clicks to buttons and card backs;
     btnMaker: function(){
-        //Card Back Clicker disabled while second card clicked
+        //Card Clicked if second_card_clicked -> card_clicked  else shake card
         $(".back").click(function(){
             //console.log("clicked a" , this);
             if(!Data.second_card_clicked){
                 Game.card_clicked(this);
+            }
+            else{
+                $(this).parent().effect("shake");
             }
         })
         //THE RESET BUTTON
@@ -91,7 +94,10 @@ Game = {
             console.log(Data.score, Data.totalCards);
             Data.score++;
             Game.animate(targ);
-            Game.resetDataFlags();
+            setTimeout(function(){
+                Game.resetDataFlags();
+            }, 500);
+
         }
     },
     //animate an elements sibling
