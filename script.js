@@ -16,12 +16,13 @@ Data = {
     srcNumbers: [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9],
     first_card_clicked: null,
     second_card_clicked: null,
+    mortyInit: null,
     score: 0,
     firstcardId: null,
+    gameBoard: null,
     totalCards: 18,
     attempt: 0,
-    accuracy: 0,
-    mortyInit: false
+    accuracy: 0
 }
 
 //game logic "engine" functions
@@ -37,6 +38,9 @@ Game = {
         $(".reset").click(function(){
             //console.log("clicked", this);
             $("#game-area").html("");
+            if(Data.gameBoard){
+                $("#game-area").append(Data.gameBoard);
+            }
             Game.createMorty(Data.mortyInit);
             Data.score = 0;
             Game.resetDataFlags();
@@ -113,6 +117,7 @@ Game = {
         }
         else{
             Data.totalCards = $("#game-area").children().length;
+            Data.gameBoard = $("#game-area").html();
             console.log(Data.totalCards);
         }
     },
