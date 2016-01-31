@@ -13,17 +13,24 @@ $(document).ready(function() {
 
 //game variable storage
 Data = {
+    //Game Logic
     first_card_clicked: null,
     second_card_clicked: null,
     mortyInit: null,
-    matches: 0,
     gameBoard: null,
+    //Stats
+    matches: 0,
     totalCards: 18,
     attempts: 0,
     accuracy: 0,
+    //Timers
     games_played: 0,
     gameTimer: 0,
-    gameTime: null,
+    gameTime: 0,
+    time_difference: null,
+    current_time: null,
+    static_time : new Date(),
+    //Items
     morties_collected: [],
     morty_list: ["trueMorty","roboMorty","cyclopsMorty","rainbowMorty","businessMorty","psychoMorty","wizardMorty","magicMorty","bikerMorty"],
     morty_dex: {
@@ -69,6 +76,7 @@ Game = {
             Game.reset_stats();
             Game.resetDataFlags();
             Game.btnBackMaker();
+            Data.gameTime = 0;
 
             $("body").addClass('world2');
         })
@@ -83,9 +91,9 @@ Game = {
         if (Data.gameTime == 0) {
             Data.gameTime = setInterval(function () {
                 //console.log("Timer Check");
-                current_time = new Date();
-                time_difference = Math.floor((current_time - static_time) / 1000);
-                $('.timer').html("").append(time_difference);
+                Data.current_time = new Date();
+                Data.time_difference = Math.floor((Data.current_time - Data.static_time) / 1000);
+                $('.timer .value').text(Data.time_difference)
                 //console.log(time_difference);
             }, 1000);
         }
