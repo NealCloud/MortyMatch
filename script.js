@@ -19,17 +19,16 @@ Data = {
     mortyInit: null,
     gameBoard: null,
     //Stats
+    world: 0,
     matches: 0,
     totalCards: 18,
     attempts: 0,
     accuracy: 0,
-    //Timers
     games_played: 0,
+    //Timers
     gameTimer: 0,
-    gameTime: 0,
-    time_difference: null,
-    current_time: null,
-    static_time : new Date(),
+    countdown: 0,
+    time_display: ".timer .value",
     //Items
     morties_collected: [],
     morty_list: ["trueMorty","roboMorty","cyclopsMorty","rainbowMorty","businessMorty","psychoMorty","wizardMorty","magicMorty","bikerMorty"],
@@ -68,17 +67,20 @@ Game = {
             //clear gameboard;
             $("#game-area").html("");
             //checks for premade gameboard otherwise use dynamic function to create
-
+            //reset timer
+            clearInterval(Data.gameTimer);
+            Data.gameTimer = 0;
+            Data.static_time = new Date();
             //resets the Data vars and initiates game
             Game.createMortyMatch();
             Data.matches = 0;
-            Data.games_played+= Data.attempts > 0? 1: 0;
+            Data.games_played += Data.attempts > 0? 1: 0;
             Game.reset_stats();
             Game.resetDataFlags();
             Game.btnBackMaker();
-            Data.gameTime = 0;
-
-            $("body").addClass('world2');
+            $('.timer .value').text("0");
+            $("#game-area").removeClass('world1');
+            $("#game-area").addClass('world2');
         })
 
         $(".btnflip").click(function(){
@@ -88,14 +90,8 @@ Game = {
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
-        if (Data.gameTime == 0) {
-            Data.gameTime = setInterval(function () {
-                //console.log("Timer Check");
-                Data.current_time = new Date();
-                Data.time_difference = Math.floor((Data.current_time - Data.static_time) / 1000);
-                $('.timer .value').text(Data.time_difference)
-                //console.log(time_difference);
-            }, 1000);
+        if (Data.gameTimer == 0) {
+           Game.stopwatch(10, Data.time_display);
         }
         //if first_card_clicked is false flip this card and store this element and toggle first_card_clicked to true
         if(!Data.first_card_clicked){
@@ -190,6 +186,46 @@ Game = {
         Data.attempts = 0;
         $("#mortydex").html("<option>MortyDex</option>");
         Game.display_stats();
+    },
+    stopwatch: function(duration, display){
+        var total = duration, timer  = 0, minutes, seconds;
+        Data.countdown = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            $(display).text(minutes + ":" + seconds);
+
+            if (++timer > duration - 5) {
+                if(timer >= duration){
+                    clearInterval(Data.gameTimer);
+                    console.log("TIMER OUT");
+                }
+                $(display).addClass("win");
+            }
+        }, 1000);
+    },
+    countdown: function(duration, display){
+        var timer = duration, minutes, seconds;
+        Data.gameTimer = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            $(display).text(minutes + ":" + seconds);
+
+            if (--timer < 5) {
+                if(timer <= 0){
+                    clearInterval(Data.gameTimer);
+                    console.log("TIMER OUT");
+                }
+                $(display).addClass("win");
+            }
+        }, 1000);
     },
     //creating cards dynamically
     createMortyMatch : function() {

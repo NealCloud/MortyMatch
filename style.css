@@ -4,6 +4,7 @@ body{
     max-width: 1000px;
     margin: auto;
     color: #00E2E2;
+    background-color: #162929;
 }
 .world1{
     background: #162929 url("image/world1.png") no-repeat fixed center;
