@@ -3,9 +3,8 @@
  */
 $(document).ready(function() {
     // initialize game creating the board game with a randomly generated cardset or
-
-    Data.mortyInit = Game.randomMorty(Data.totalCards/2);
-    Game.createMortyMatch(Data.mortyInit);
+    //Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+    Game.createMortyMatch();
     //create a click event on all card backs
     Game.btnBackMaker();
     //create reset btn
@@ -18,12 +17,26 @@ Data = {
     second_card_clicked: null,
     mortyInit: null,
     matches: 0,
-    firstcardId: null,
     gameBoard: null,
     totalCards: 18,
     attempts: 0,
     accuracy: 0,
-    games_played: 0
+    games_played: 0,
+    gameTimer: 0,
+    gameTime: null,
+    morties_collected: [],
+    morty_list: ["trueMorty","roboMorty","cyclopsMorty","rainbowMorty","businessMorty","psychoMorty","wizardMorty","magicMorty","bikerMorty"],
+    morty_dex: {
+        trueMorty: {hp:100, attack: 200},
+        roboMorty: {},
+        cyclopsMorty: {},
+        rainbowMorty: {},
+        businessMorty: {},
+        psychoMorty: {},
+        wizardMorty: {},
+        magicMorty: {},
+        bikerMorty: {},
+    }
 }
 
 //game logic "engine" functions
@@ -48,26 +61,39 @@ Game = {
             //clear gameboard;
             $("#game-area").html("");
             //checks for premade gameboard otherwise use dynamic function to create
-            Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+
             //resets the Data vars and initiates game
-            Game.createMortyMatch(Data.mortyInit);
+            Game.createMortyMatch();
             Data.matches = 0;
-            Data.games_played++;
+            Data.games_played+= Data.attempts > 0? 1: 0;
             Game.reset_stats();
             Game.resetDataFlags();
             Game.btnBackMaker();
+
+            $("body").addClass('world2');
+        })
+
+        $(".btnflip").click(function(){
+           Game.flipEverything();
         })
     },
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
-
-
+        if (Data.gameTime == 0) {
+            Data.gameTime = setInterval(function () {
+                //console.log("Timer Check");
+                current_time = new Date();
+                time_difference = Math.floor((current_time - static_time) / 1000);
+                $('.timer').html("").append(time_difference);
+                //console.log(time_difference);
+            }, 1000);
+        }
         //if first_card_clicked is false flip this card and store this element and toggle first_card_clicked to true
         if(!Data.first_card_clicked){
             $(targ).addClass("flip");
-            Data.firstcardid = targ;
-            Data.first_card_clicked = true;
+           // Data.firstcardid = targ;
+            Data.first_card_clicked = targ;
         }
         //if first_card_clicked compareCards
         else{
@@ -75,25 +101,32 @@ Game = {
         }
     },
    //Second card clicked -> (*mouse click disabled) flip second card and set true and flip target card and compare img src
-    compareCards: function(targ){
+    compareCards: function(card){
         Data.attempts++;
-        Data.second_card_clicked = true;
-        $(targ).addClass("flip");
+        Data.second_card_clicked = card;
+        $(card).addClass("flip");
+        var firstSrc = $(card).siblings(".front").find("img").attr("src");
+        var secondSrc = $(Data.first_card_clicked).siblings( ".front").find("img").attr("src");
+
         //The card src images are not equal -> use Timeout to delay a flip back and reset data variables and wait for click
-        if($(targ).siblings( ".front").find("img").attr("src") != $(Data.firstcardid).siblings( ".front").find("img").attr("src")){
+        console.log(firstSrc, secondSrc);
+        if(firstSrc != secondSrc){
             Game.display_stats();
             setTimeout(function(){
-                $(targ).removeClass("flip");
-                $(Data.firstcardid).removeClass("flip");
+                $(card).removeClass("flip");
+                $(Data.first_card_clicked).removeClass("flip");
                 Game.resetDataFlags();
-            }, 2000);
+            }, 1000);
         }
-        //The cards are equal -> go to matchedCards function to check if game won
+        //The cards are equal -> add morty to pokedex and move to matchedCards function to check if game won
         else{
-           Game.matchedCards(targ);
+            var firstNum = /\d+/.exec(firstSrc)[0];
+            Game.addMorty(firstNum);
+            Game.matchedCards(card);
         }
     },
     matchedCards: function(targ){
+
         console.log(Data.matches, Data.attempts);
         //game is won -> clear game board and display win text and wait for reset
 
@@ -117,19 +150,26 @@ Game = {
     //animate an elements sibling
     animate: function(element){
         $(element).siblings(".front").animate({bottom: "-=200px"}, 800).fadeOut(800);
-        $(Data.firstcardid).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
+        $(element).html("");
+        $(Data.first_card_clicked).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
+        $(Data.first_card_clicked).html("");
+    },
+    flipEverything: function(){
+        $(".back").addClass("flip").delay(2000).queue(function(next){
+            $(this).removeClass("flip");
+            next();
+        });
     },
     // reset the card click and id values
     resetDataFlags: function(){
         Data.second_card_clicked = null;
-        Data.firstcardid = null;
         Data.first_card_clicked = null;
     },
     display_stats: function(){
         //check math
         var a = Data.matches;
         var b = Data.attempts;
-        Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0
+        Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0;
 
         $(".attempts").find(".value").text(Data.attempts);
         $(".matches").find(".value").text(Data.matches);
@@ -140,28 +180,32 @@ Game = {
         Data.accuracy = 0;
         Data.matches = 0;
         Data.attempts = 0;
+        $("#mortydex").html("<option>MortyDex</option>");
         Game.display_stats();
     },
-    //Below is for creating cards dynamically ignore
+    //creating cards dynamically
+    createMortyMatch : function() {
+        var cards = parseInt($("#cardNumber").val());
 
-    createMortyMatch : function(picIdarray) {
-        //calls for a dynamic card creation  * use the randomMorty function to create such an array
-        if(picIdarray){
-            Game.dynamicCardCreate(picIdarray);
+        if(cards < 9 && cards > 1){
+            console.log(typeof cards, cards);
+            Game.dynamicCardCreate(Game.randomMorty(cards));
         }
-        //if no random number array is used copy game board inside game-area
         else{
-            Data.totalCards = $("#game-area").children().length;
-            Data.gameBoard = $("#game-area").html();
-            console.log(Data.totalCards);
+            console.log(Data.totalCards/2);
+            //calls for a dynamic card creation  * use the randomMorty function to create such an array
+            Game.dynamicCardCreate(Game.randomMorty(Data.totalCards / 2));
         }
     },
     //create card divs with img src in the order of a number array
     dynamicCardCreate : function(numberArray){
-        for (var i = 0; i < 9; i++) {
+
+        var numLen = numberArray.length/2;
+        console.log(numLen);
+        for (var i = 0; i < numLen; i++) {
             for (var j = 0; j < 2; j++) {
                 var cardcontain = $("<div>", {
-                    class: "card clickme",
+                    class: "card",
                     html: " <div class='front'>" +
                     "<img src='image/morty" + numberArray.pop() + ".png' alt='cardfront'>" +
                     "</div>" +
@@ -175,6 +219,7 @@ Game = {
     },
     //returns an array of predefined numbers in a random order;
     randomMorty: function(num){
+        console.log("randomMorty array:", num);
         pics = [];
         for(var i = 1; i < num + 1; i++){
             pics.push(i);
@@ -190,8 +235,17 @@ Game = {
             var temp = ((pics.splice(num, 1)));
             randomnums.push(temp[0]);
         }
-        //console.log(randomnums);
+        console.log(randomnums);
         return randomnums;
+    },
+    //add Morty to index
+    addMorty: function(morty){
+        console.log(morty);
+        var mortyName = Data.morty_list[morty - 1];
+        console.log(mortyName);
+        Data.morties_collected.push(Data.morty_dex[mortyName]);
+        $("<option>").text(mortyName).appendTo("#mortydex");
+        console.log(Data.morties_collected);
     }
 }
 

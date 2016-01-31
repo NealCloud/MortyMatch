@@ -5,8 +5,11 @@ body{
     margin: auto;
     color: #00E2E2;
 }
-.morty-bg{
-    background: #162929 url("image/background1.png") no-repeat fixed center;
+.world1{
+    background: #162929 url("image/world1.png") no-repeat fixed center;
+}
+.world2{
+    background: #162929 url("image/world2.png") no-repeat fixed center;
 }
 
 .reset {
