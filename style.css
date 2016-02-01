@@ -6,11 +6,29 @@ body{
     color: #00E2E2;
     background-color: #162929;
 }
+.world0{
+    background: #162929 url("image/world0.jpg") no-repeat fixed center;
+}
 .world1{
     background: #162929 url("image/world1.png") no-repeat fixed center;
 }
 .world2{
     background: #162929 url("image/world2.png") no-repeat fixed center;
+}
+.world3{
+    background: #162929 url("image/world3.png") no-repeat fixed center;
+}
+.world4{
+    background: #162929 url("image/world4.png") no-repeat fixed center;
+}
+.world5{
+    background: #162929 url("image/world5.png") no-repeat fixed center;
+}
+.world6{
+    background: #162929 url("image/world6.png") no-repeat fixed center;
+}
+.world7{
+    background: #162929 url("image/world7.png") no-repeat fixed center;
 }
 
 .reset {
