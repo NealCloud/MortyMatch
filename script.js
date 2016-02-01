@@ -8,7 +8,6 @@ $(document).ready(function() {
     //create a click event on all card backs
    // Game.btnBackMaker();
     //create reset btn
-
     Game.mortyInit();
 
 });
@@ -21,6 +20,7 @@ Data = {
     mortyInit: null,
     gameBoard: null,
     //Stats
+    flurbos: 0,
     currentworld: 0,
     matches: 0,
     totalCards: 18,
@@ -52,10 +52,10 @@ Data = {
         psychoMorty: {},
         wizardMorty: {},
         magicMorty: {},
-        bikerMorty: {},
+        bikerMorty: {}
     },
     worlds: {
-        world0:["<div> its ricks mart!</div>", "world0"],
+        world0:["<div> its ricks mart!</div>", "world0", 0],
         world1: ["<div> its a colorful planet!</div>", "world1"],
         world2: ["<div> its world2!</div>", "world2"],
         world3: ["<div>  its world3!</div>", "world3"],
@@ -103,12 +103,13 @@ Game = {
         })
 
         $(".portal").click(function(){
-            if(Data.portalReady && Data.portalFuel > 0){
-                if(Data.portalFuel < 3){
-                    console.log("your running low on fuel!");
-                }
-                Data.portalFuel--;
-                Game.portal(Data.currentworld);
+            if(Data.portalReady && Game.fuelCheck()){
+                Game.portalRandom(Data.currentworld);
+            }
+        })
+        $(".market").click(function(){
+            if(Data.currentworld != 0 && Data.portalReady && Game.fuelCheck()){
+                Game.portalPlace(Data.currentworld, Data.worlds.world0);
             }
         })
 
@@ -116,7 +117,8 @@ Game = {
             Game.flipEverything();
         })
     },
-    portal: function(previousWorld){
+
+    portalRandom: function(previousWorld){
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
         console.log(previousWorld);
@@ -130,6 +132,23 @@ Game = {
         Data.currentworld = r;
         $("#game-area").addClass(world[1]).append(world[0]);
 
+    },
+    portalPlace: function(previousWorld, gohere){
+        var world = Data.worlds["world" + previousWorld];
+        $("#game-area").removeClass(world[1]);
+        world = gohere;
+        Data.currentworld = world[2];
+        $("#game-area").addClass(world[1]).append(world[0]);
+    },
+    fuelCheck: function(){
+        if( --Data.portalFuel > 0){
+            if(Data.portalFuel < 3){
+                console.log("your running low on fuel!");
+            }
+            return true;
+        }
+        console.log("your out of fuel!");
+        return false;
     },
 
     // called when a card is clicked enacts core game logic
