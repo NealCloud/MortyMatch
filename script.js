@@ -9,6 +9,8 @@ $(document).ready(function() {
    // Game.btnBackMaker();
     //create reset btn
     Game.mortyInit();
+    Game.display_stats();
+    Game.modal();
 });
 
 //game variable storage
@@ -19,7 +21,7 @@ Data = {
     mortyInit: null,
     gameBoard: null,
     //Stats
-    flurbos: 0,
+    flurbos: 200,
     currentworld: 0,
     matches: 0,
     totalCards: 18,
@@ -85,19 +87,17 @@ Game = {
         })
         //THE RESET BUTTON
     },
+    //useful buttons on side of screen
     sideBtnMaker:function(){
+        //reset button TODO fix it
         $(".reset").click(function(){
-
             $("#game-area").html("");
-
-
             Data.matches = 0;
             Data.games_played += Data.attempts > 0 ? 1: 0;
             Game.reset_stats();
-
             $('.timer .value').text("0");
         })
-
+        //activates portal to random place;
         $(".portal").click(function(){
             if(Data.portalReady && Game.fuelCheck()){
                 Game.portalRandom(Data.currentworld);
@@ -105,41 +105,45 @@ Game = {
                 Game.missionCreate();
             }
         })
-
+        //activate portal to the market;
         $(".market").click(function(){
             if(Data.currentworld != 0 && Data.portalReady && Game.fuelCheck()){
                 Game.reset_stats();
                 Game.portalPlace(Data.currentworld, Data.worlds.world0);
             }
         })
+        //activate portal to prison break
         $(".prison").click(function(){
             if(Data.currentworld != 7 && Data.portalReady && Game.fuelCheck()){
                 Game.reset_stats();
                 Game.portalPlace(Data.currentworld, Data.worlds.world7);
             }
         })
-
+        //activate to flip board cheat;
         $(".btnflip").click(function(){
             Game.flipEverything(1000);
         })
     },
+    //start mission phase after portal to a world
     missionCreate: function(){
-        var btn = $("<button>").text("choice a").addClass("choice");
+        var btn = $("<button>").text("choice a").addClass("complete");
         var divo = $("<div>").append(btn);
         $("#game-area").append(divo);
         Game.missionBtn();
-
     },
+    //creates mission choice buttons;
     missionBtn: function(){
-        $(".choice").click(function(){
-            console.log("choice was made!");
-            Game.missionComplete(10);
+        $(".complete").click(function(){
+            console.log("complete was made!");
+            Game.missionComplete(3);
         })
     },
+    //activate to finish a mission and start morty match reward phase
     missionComplete: function(num){
       $("#game-area").html("");
        Game.startMortyMatch(num);
     },
+    //starts morty match game
     startMortyMatch: function(num){
         Data.portalReady = false;
         Game.resetDataFlags();
@@ -154,33 +158,39 @@ Game = {
             Game.stopwatch(-10, ".timer .value", Game.endMortyMatch);
         }, 2000);
     },
+    //end morty match game
     endMortyMatch: function(){
         Data.portalReady = true;
         $("#game-area").html("");
         console.log("morty match over");
     },
+    //portal to random world takes previous world int to compare and go to different world
     portalRandom: function(previousWorld){
+        //remove previous world class
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
-        console.log(world[1]);
+        //find a random number different to previous world number
         var r = previousWorld;
         while(r == previousWorld){
            r = Math.floor(Math.random() * Data.world_list.length) + 1;
         }
-        console.log(r, previousWorld);
+        console.log("previous: " + previousWorld + " new: " + r);
+        //access world objects and append html to page;
         world = Data.worlds["world" + r];
-        console.log(world);
         Data.currentworld = r;
         $("#game-area").addClass(world[1]).append(world[0]);
-
     },
-    portalPlace: function(previousWorld, gohere){
+    //portal to a specific world
+    portalPlace: function(previousWorld, destination){
+        //check previous world and remove class
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
-        world = gohere;
+        //assign to destination set current and append class to bg
+        world = destination;
         Data.currentworld = world[2];
         $("#game-area").addClass(world[1]).append(world[0]);
     },
+    //check portal gun charges
     fuelCheck: function(){
         if( --Data.portalFuel > 0){
             if(Data.portalFuel < 3){
@@ -191,7 +201,6 @@ Game = {
         console.log("your out of fuel!");
         return false;
     },
-
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
@@ -275,6 +284,7 @@ Game = {
         Data.second_card_clicked = null;
         Data.first_card_clicked = null;
     },
+    //display all side stats
     display_stats: function(){
         //check math
         var a = Data.matches;
@@ -282,22 +292,26 @@ Game = {
         Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0;
 
         $(".attempts").find(".value").text(Data.attempts);
+        $(".currency").find(".value").text("$" + Data.flurbos);
+        $(".fuel").find(".value").text(Data.portalFuel);
         $(".matches").find(".value").text(Data.matches);
         $(".accuracy").find(".value").text(Data.accuracy);
         $(".games-played").find(".value").text(Data.games_played);
     },
+    //reset the stats in morty match
     reset_stats: function(){
         Data.accuracy = 0;
         Data.matches = 0;
         Data.attempts = 0;
-        $("#mortydex").html("<option>MortyDex</option>");
+        //$("#mortydex").html("<option>MortyDex</option>");
         Game.display_stats();
     },
-    stopwatch: function(duration, display, func){
+    //a countdown and regular timer, a bit wonky
+    // negative duration to count down and positive to start from 0 to duration
+    stopwatch: function(duration, display, callback){
         var timer, total, minutes, seconds, variable;
         console.log(duration);
         if(duration > 0){
-            console.log(variable);
             variable = "Data.gameTimer";
             timer = 0;
             total = duration;
@@ -307,12 +321,12 @@ Game = {
             timer = duration;
             total = 0;
         }
-        //console.log(timer);
         window[variable] = setInterval(function () {
             console.log(timer);
+            //uses abs to clear - sign
             minutes = Math.abs(parseInt(timer / 60, 10));
             seconds = Math.abs(parseInt(timer % 60, 10));
-
+            //adds a zero if less then 10 for uniformity
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -320,7 +334,8 @@ Game = {
 
             if (++timer > total - 5) {
                 if(timer >= total + 1){
-                    func();
+                    //activate callback and clear timer
+                    callback();
                     clearInterval(window[variable]);
                     console.log("TIMER OUT");
                 }
@@ -397,7 +412,28 @@ Game = {
         Data.morties_collected.push(Data.morty_dex[mortyName]);
         $("<option>").text(mortyName).appendTo("#mortydex");
         console.log(Data.morties_collected);
+    },
+    modal: function(){
+        var inventory = $('#mortyBag');
+        var btn = $("#inventory");
+        var span = $(".close");
+        $(btn).click(function() {
+            inventory.css("display","block");
+        })
+// When the user clicks on <span> (x), close the inventory
+        $(span).click(function() {
+            inventory.css( "display", "none");
+        });
+// When the user clicks anywhere outside of the inventory, close it
+        $(window).click(function(event) {
+            console.log(event.target);
+            if (event.target == inventory.html) {
+                inventory.css( "display", "none");
+            }
+        });
     }
+
+
 }
 
 
