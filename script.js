@@ -9,7 +9,6 @@ $(document).ready(function() {
    // Game.btnBackMaker();
     //create reset btn
     Game.mortyInit();
-
 });
 
 //game variable storage
@@ -35,7 +34,7 @@ Data = {
     time_display: ".timer .value",
     //Items
     portalReady: true,
-    portalFuel: 10,
+    portalFuel: 210,
     morties_collected: [],
     items_collected: [],
     item_list: ["morty1.png","morty2.png","morty3.png","morty4.png","morty5.png",
@@ -61,7 +60,8 @@ Data = {
         world3: ["<div>  its world3!</div>", "world3"],
         world4: ["<div>  its world4!!</div>", "world4"],
         world5: ["<div>  its world5!!</div>", "world5"],
-        world6: ["<div>  its world6!</div>", "world6"]
+        world6: ["<div>  its world6!</div>", "world6"],
+        world7: ["<div>  its world7!</div>", "world7", 7]
     }
 }
 //game logic "engine" functions
@@ -87,44 +87,85 @@ Game = {
     },
     sideBtnMaker:function(){
         $(".reset").click(function(){
-            //console.log("clicked", this);
-            //clear gameboard;
-            $("#game-area").html("");
-            //checks for premade gameboard otherwise use dynamic function to create
 
-            //resets the Data vars and initiates game
-            Game.createMortyMatch();
+            $("#game-area").html("");
+
+
             Data.matches = 0;
             Data.games_played += Data.attempts > 0 ? 1: 0;
             Game.reset_stats();
-            Game.resetDataFlags();
-            Game.btnBackMaker();
+
             $('.timer .value').text("0");
         })
 
         $(".portal").click(function(){
             if(Data.portalReady && Game.fuelCheck()){
                 Game.portalRandom(Data.currentworld);
+                Game.reset_stats();
+                Game.missionCreate();
             }
         })
+
         $(".market").click(function(){
             if(Data.currentworld != 0 && Data.portalReady && Game.fuelCheck()){
+                Game.reset_stats();
                 Game.portalPlace(Data.currentworld, Data.worlds.world0);
+            }
+        })
+        $(".prison").click(function(){
+            if(Data.currentworld != 7 && Data.portalReady && Game.fuelCheck()){
+                Game.reset_stats();
+                Game.portalPlace(Data.currentworld, Data.worlds.world7);
             }
         })
 
         $(".btnflip").click(function(){
-            Game.flipEverything();
+            Game.flipEverything(1000);
         })
     },
+    missionCreate: function(){
+        var btn = $("<button>").text("choice a").addClass("choice");
+        var divo = $("<div>").append(btn);
+        $("#game-area").append(divo);
+        Game.missionBtn();
 
+    },
+    missionBtn: function(){
+        $(".choice").click(function(){
+            console.log("choice was made!");
+            Game.missionComplete(10);
+        })
+    },
+    missionComplete: function(num){
+      $("#game-area").html("");
+       Game.startMortyMatch(num);
+    },
+    startMortyMatch: function(num){
+        Data.portalReady = false;
+        Game.resetDataFlags();
+        var divo = $("<div>");
+
+        $("#game-area").append($("<h1>").html("GET READY!").addClass('win'));
+        setTimeout(function(){
+            $("#game-area").html("");
+            Game.createMortyMatch(num);
+            Game.btnBackMaker();
+            Game.flipEverything(4000);
+            Game.stopwatch(-10, ".timer .value", Game.endMortyMatch);
+        }, 2000);
+    },
+    endMortyMatch: function(){
+        Data.portalReady = true;
+        $("#game-area").html("");
+        console.log("morty match over");
+    },
     portalRandom: function(previousWorld){
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
-        console.log(previousWorld);
+        console.log(world[1]);
         var r = previousWorld;
         while(r == previousWorld){
-           r = Math.floor(Math.random() * Data.world_list.length + 1);
+           r = Math.floor(Math.random() * Data.world_list.length) + 1;
         }
         console.log(r, previousWorld);
         world = Data.worlds["world" + r];
@@ -154,10 +195,10 @@ Game = {
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
-        if (!Data.counting) {
-           Data.counting = true;
-           Game.stopwatch(-10, Data.time_display);
-        }
+        //if (!Data.counting) {
+        //   Data.counting = true;
+        //   Game.stopwatch(-10, Data.time_display);
+        //}
         //if first_card_clicked is false flip this card and store this element and toggle first_card_clicked to true
         if(!Data.first_card_clicked){
             $(targ).addClass("flip");
@@ -223,8 +264,8 @@ Game = {
         $(Data.first_card_clicked).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
         $(Data.first_card_clicked).html("");
     },
-    flipEverything: function(){
-        $(".back").addClass("flip").delay(2000).queue(function(next){
+    flipEverything: function(duration, countdown){
+        $(".back").addClass("flip").delay(duration).queue(function(next){
             $(this).removeClass("flip");
             next();
         });
@@ -252,7 +293,7 @@ Game = {
         $("#mortydex").html("<option>MortyDex</option>");
         Game.display_stats();
     },
-    stopwatch: function(duration, display){
+    stopwatch: function(duration, display, func){
         var timer, total, minutes, seconds, variable;
         console.log(duration);
         if(duration > 0){
@@ -279,6 +320,7 @@ Game = {
 
             if (++timer > total - 5) {
                 if(timer >= total + 1){
+                    func();
                     clearInterval(window[variable]);
                     console.log("TIMER OUT");
                 }
@@ -287,9 +329,8 @@ Game = {
         }, 1000);
     },
     //creating cards dynamically
-    createMortyMatch : function() {
-        var cards = parseInt($("#cardNumber").val());
-
+    createMortyMatch : function(cards) {
+        //var cards = parseInt($("#cardNumber").val());
         if(cards < 9 && cards > 1){
             console.log(typeof cards, cards);
             Game.dynamicCardCreate(Game.randomCardArray(cards, Data.item_list));
