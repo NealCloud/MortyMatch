@@ -10,7 +10,7 @@ $(document).ready(function() {
     //create reset btn
     Data.portalReady = false;
     Game.mortyInit();
-    Game.display_stats();
+    Match.display_stats();
     Game.modalActive();
 });
 
@@ -137,7 +137,7 @@ Game = {
         $(".back").click(function(){
             //console.log("clicked a" , this);
             if(!Data.second_card_clicked){
-                Game.card_clicked(this);
+                Match.card_clicked(this);
             }
             else{
                 $(this).parent().effect("shake");
@@ -159,7 +159,7 @@ Game = {
         $(".portal").click(function(){
             if(Data.portalReady && Game.fuelCheck()){
                 Game.portalRandom(Data.currentworld);
-                Game.reset_stats();
+                Match.reset_stats();
                 Game.createMission(2);
             }
         })
@@ -182,7 +182,7 @@ Game = {
         })
         //activate to flip board cheat;
         $(".btnflip").click(function(){
-            Game.flipEverything(1000);
+            Match.flipEverything(1000);
         })
     },
     //start mission phase after portal to a world
@@ -195,15 +195,15 @@ Game = {
     //starts morty match game
     startMortyMatch: function(num){
         Data.portalReady = false;
-        Game.resetDataFlags();
+        Match.resetDataFlags();
         var divo = $("<div>");
 
         $("#game-area").append($("<h1>").html("GET READY!").addClass('win'));
         setTimeout(function(){
             $("#game-area").html("");
-            Game.createMortyMatch(num);
+            Card.createMortyMatch(num);
             Game.btnBackMaker();
-            Game.flipEverything(4000);
+            Match.flipEverything(4000);
             Game.stopwatch(-10, ".timer .value", Game.endMortyMatch);
 
         }, 2000);
@@ -337,113 +337,7 @@ Game = {
         console.log("your out of fuel!");
         return false;
     },
-    // called when a card is clicked enacts core game logic
-    // arguments used (element, boolean)  targ element card and if 2nd card clicked
-    card_clicked: function(targ){
-        //if (!Data.counting) {
-        //   Data.counting = true;
-        //   Game.stopwatch(-10, Data.time_display);
-        //}
-        //if first_card_clicked is false flip this card and store this element and toggle first_card_clicked to true
-        if(!Data.first_card_clicked){
-            $(targ).addClass("flip");
-           // Data.firstcardid = targ;
-            Data.first_card_clicked = targ;
-        }
-        //if first_card_clicked compareCards
-        else{
-            Game.compareCards(targ);
-        }
-    },
-   //Second card clicked -> (*mouse click disabled) flip second card and set true and flip target card and compare img src
-    compareCards: function(card){
-        Data.attempts++;
-        Data.second_card_clicked = card;
-        $(card).addClass("flip");
-        var firstSrc = $(card).siblings(".front").find("img").attr("src");
-        var secondSrc = $(Data.first_card_clicked).siblings( ".front").find("img").attr("src");
 
-        //The card src images are not equal -> use Timeout to delay a flip back and reset data variables and wait for click
-        console.log(firstSrc, secondSrc);
-        if(firstSrc != secondSrc){
-            Game.display_stats();
-            setTimeout(function(){
-                $(card).removeClass("flip");
-                $(Data.first_card_clicked).removeClass("flip");
-                Game.resetDataFlags();
-            }, 1000);
-        }
-        //The cards are equal -> add morty to pokedex and move to matchedCards function to check if game won
-        else{
-            var firstNum = /\/(.+)\.png$/gm.exec(firstSrc)[1];
-            console.log(firstNum);
-            console.log(firstSrc);
-            Game.addMorty(firstNum);
-            Game.matchedCards(card);
-        }
-    },
-    matchedCards: function(targ){
-
-        console.log(Data.matches, Data.attempts);
-        //game is won -> clear game board and display win text and wait for reset
-
-        if(Data.matches == Data.totalCards / 2 - 1 ){
-            Game.display_stats();
-            Game.animate(targ);
-            $("#game-area").html("");
-            $("#game-area").append($("<h1>").html("You win").addClass('win'));
-
-        }
-        //not yet won -> increase matches, fade out cards and reset data flag variables and wait for next click
-        else{
-            Data.matches++;
-            Game.animate(targ);
-            setTimeout(function(){
-                Game.resetDataFlags();
-            }, 500);
-        }
-        Game.display_stats();
-    },
-    //animate an elements sibling
-    animate: function(element){
-        $(element).siblings(".front").animate({bottom: "-=200px"}, 800).fadeOut(800);
-        $(element).html("");
-        $(Data.first_card_clicked).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
-        $(Data.first_card_clicked).html("");
-    },
-    flipEverything: function(duration, countdown){
-        $(".back").addClass("flip").delay(duration).queue(function(next){
-            $(this).removeClass("flip");
-            next();
-        });
-    },
-    // reset the card click and id values
-    resetDataFlags: function(){
-        Data.second_card_clicked = null;
-        Data.first_card_clicked = null;
-    },
-    //display all side stats
-    display_stats: function(){
-        //check math
-        var a = Data.matches;
-        var b = Data.attempts;
-        Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0;
-
-        $(".attempts").find(".value").text(Data.attempts);
-        $(".currency").find(".value").text("$" + Data.flurbos);
-        $(".fuel").find(".value").text(Data.portalFuel);
-        $(".matches").find(".value").text(Data.matches);
-        $(".accuracy").find(".value").text(Data.accuracy);
-        $(".games-played").find(".value").text(Data.games_played);
-    },
-    //reset the stats in morty match
-    reset_stats: function(){
-        Data.accuracy = 0;
-        Data.matches = 0;
-        Data.attempts = 0;
-        //$("#mortydex").html("<option>MortyDex</option>");
-        Game.display_stats();
-    },
     //a countdown and regular timer, a bit wonky
     // negative duration to count down and positive to start from 0 to duration
     stopwatch: function(duration, display, callback){
@@ -481,76 +375,7 @@ Game = {
             }
         }, 1000);
     },
-    //creating cards dynamically
-    createMortyMatch : function(cards) {
-        //var cards = parseInt($("#cardNumber").val());
-        if(cards < 9 && cards > 1){
-            console.log(typeof cards, cards);
-            Game.dynamicCardCreate(Game.randomCardArray(cards, Data.item_list));
-        }
-        else{
-            console.log(Data.totalCards/2);
-            //calls for a dynamic card creation  * use the randomCardArray function to create such an array
-            Game.dynamicCardCreate(Game.randomCardArray(Data.totalCards / 2, Game.takefromArray(9,Data.item_list)));
-        }
-    },
-    //create card divs with img src in the order of a number array
-    dynamicCardCreate : function(numberArray){
-        var numLen = numberArray.length/2;
-        console.log(numLen);
-        for (var i = 0; i < numLen; i++) {
-            for (var j = 0; j < 2; j++) {
-                var cardcontain = $("<div>", {
-                    class: "card",
-                    html: " <div class='front'>" +
-                    "<img src='image/" + numberArray.pop() + "' alt='cardfront'>" +
-                    "</div>" +
-                    "<div class='back'> " +
-                    "<img src='image/cardback.png' alt='cardback'>" +
-                    "</div>"
-                });
-                $(cardcontain).appendTo("#game-area");
-            }
-        }
-    },
-    takefromArray:function(num, pics){
-        var picsalter = [];
-        for(var i = 0; i < pics.length; i++){
-            picsalter.push(pics[i])
-        }
-        console.log(picsalter);
-        var piclist = [];
-        var picslen = num;
-        for(var i = 0; i < picslen; i++){
-            var curlen = picsalter.length;
-            var random = Math.floor(Math.random() * curlen);
-            var temp = ((picsalter.splice(random, 1)));
-            piclist.push(temp[0]);
-        }
 
-        return piclist;
-    },
-    //take in an array of images doubles and randomizes them;
-    randomCardArray: function(num, items){
-        console.log("randomCardArray array:", num, items);
-        var pics = [];
-        for(var i = 0; i < num ; i++){
-            pics.push(items[i]);
-            pics.push(items[i]);
-        }
-        //remove to have random card placement
-        //return pics;
-        var randomnums = [];
-        var picslen = pics.length;
-        for(var i = 0; i < picslen; i++){
-            var curlen = pics.length;
-            var num = Math.floor(Math.random() * curlen);
-            var temp = ((pics.splice(num, 1)));
-            randomnums.push(temp[0]);
-        }
-        console.log(randomnums);
-        return randomnums;
-    },
     //add Morty to index
     addMorty: function(morty){
         console.log(morty + " added");
