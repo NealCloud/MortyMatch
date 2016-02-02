@@ -53,7 +53,10 @@ Data = {
         psychoMorty: {},
         wizardMorty: {},
         magicMorty: {},
-        bikerMorty: {}
+        bikerMorty: {},
+        GreenMorty: {},
+        RedMorty: {},
+        BlueMorty: {}
     },
     worlds: {
         world0:["<div> its ricks mart!</div>", "world0", 0],
@@ -88,9 +91,32 @@ Data = {
 //game logic "engine" functions
 Game = {
     mortyInit: function(){
+        var startingMorty = ["RedMorty", "BlueMorty", "GreenMorty"];
         var world = Data.worlds.world0;
         $("#game-area").addClass(world[1]).append(world[0]);
+        var morty;
+        for(var i = 0; i < startingMorty.length; i++){
+            morty = startingMorty[i];
+            //append shop Icons
+            console.log(typeof morty);
+            $("<div>", {
+                class: "people",
+                attr: { onclick: "Game.start('" + morty + "');"},
+                html: "<img src='image/me.jpg'>" + morty
+            }).appendTo("#game-area");
+        }
         Game.sideBtnMaker();
+    },
+    start : function(morty){
+        Game.clearGameArea();
+        $("<option>").text(morty).appendTo("#mortydex");
+        Data.morties_collected.push(morty);
+
+        $("<div>", {
+            class: "people",
+            html: "<img src='image/me.jpg'> Excellent Choice Now head out and collect more mortys"
+        }).appendTo("#game-area");
+
     },
     randomRange : function(min, max){
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -178,6 +204,7 @@ Game = {
             Game.btnBackMaker();
             Game.flipEverything(4000);
             Game.stopwatch(-10, ".timer .value", Game.endMortyMatch);
+
         }, 2000);
     },
     //end morty match game
@@ -501,10 +528,13 @@ Game = {
     //add Morty to index
     addMorty: function(morty){
         console.log(morty + " added");
+
         var mortyName = Data.morty_list[morty - 1];
-        console.log(mortyName);
+
         Data.morties_collected.push(Data.morty_dex[mortyName]);
+
         $("<option>").text(mortyName).appendTo("#mortydex");
+
         console.log(Data.morties_collected);
     },
     addItem: function(item){
