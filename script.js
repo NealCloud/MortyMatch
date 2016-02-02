@@ -45,18 +45,18 @@ Data = {
         "psychoMorty","wizardMorty","magicMorty","bikerMorty"],
     world_list: ["world1","world2","world3","world4","world5","world6"],
     morty_dex: {
-        trueMorty: {health:200, stamina: 200, wit: 20, strength:20, speed:20, dead: false},
-        roboMorty: {},
-        cyclopsMorty: {},
-        rainbowMorty: {},
-        businessMorty: {},
-        psychoMorty: {},
-        wizardMorty: {},
-        magicMorty: {},
-        bikerMorty: {},
-        GreenMorty: {},
-        RedMorty: {},
-        BlueMorty: {}
+        trueMorty: {health:200, stamina: 200, wit: 20, strength:20, speed:20, dead: false, src:"morty1.png"},
+        roboMorty: {src:"morty1.png"},
+        cyclopsMorty: {src:"morty1.png"},
+        rainbowMorty: {src:"morty1.png"},
+        businessMorty: {src:"morty1.png"},
+        psychoMorty: {src:"morty1.png"},
+        wizardMorty: {src:"morty1.png"},
+        magicMorty: {src:"morty1.png"},
+        bikerMorty: {src:"morty1.png"},
+        GreenMorty: {src:"morty1.png"},
+        RedMorty: {src:"morty1.png"},
+        BlueMorty: {src:"morty1.png"}
     },
     worlds: {
         world0:["<div> its ricks mart!</div>", "world0", 0],
@@ -94,15 +94,17 @@ Game = {
         var startingMorty = ["RedMorty", "BlueMorty", "GreenMorty"];
         var world = Data.worlds.world0;
         $("#game-area").addClass(world[1]).append(world[0]);
-        var morty;
+        var morty, image;
         for(var i = 0; i < startingMorty.length; i++){
             morty = startingMorty[i];
+            image = Data.morty_dex[morty].src;
+            console.log(image);
             //append shop Icons
             console.log(typeof morty);
             $("<div>", {
                 class: "people",
                 attr: { onclick: "Game.start('" + morty + "');"},
-                html: "<img src='image/me.jpg'>" + morty
+                html: "<img src=image/" + image + ">" + morty
             }).appendTo("#game-area");
         }
         Game.sideBtnMaker();
