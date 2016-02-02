@@ -48,7 +48,6 @@ Card = {
             var temp = ((picsalter.splice(random, 1)));
             piclist.push(temp[0]);
         }
-
         return piclist;
     },
     //take in an array of images doubles and randomizes them;
