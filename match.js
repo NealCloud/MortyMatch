@@ -2,6 +2,7 @@
  * Created by Mad Martigan on 2/2/2016.
  */
 Match = {
+    //Morty Match Game Logic
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
@@ -108,8 +109,5 @@ Match = {
         Data.attempts = 0;
         //$("#mortydex").html("<option>MortyDex</option>");
         Match.display_stats();
-    },
-
-
-
+    }
 }
