@@ -41,9 +41,9 @@ Data = {
     morties_collected: [],
     backpack: { hp: 0, },
     item_list: ["morty1.png","morty2.png","morty3.png","morty4.png","morty5.png",
-        "morty6.png","morty7.png","morty8.png","morty9.png"],
+        "morty6.png","morty7.png","morty8.png","morty9.png","morty10.png","morty11.png"],
     morty_list: ["trueMorty","roboMorty","cyclopsMorty","rainbowMorty","businessMorty",
-        "psychoMorty","wizardMorty","magicMorty","bikerMorty"],
+        "psychoMorty","wizardMorty","magicMorty","bikerMorty","fatMorty","rektMroty","FOboMorty","IcarusMorty"],
     world_list: ["world1","world2","world3","world4","world5","world6"],
     morty_dex: {
         trueMorty: {health:200, stamina: 200, wit: 20, strength:20, speed:20, dead: false, src:"morty1.png"},
@@ -491,7 +491,7 @@ Game = {
         else{
             console.log(Data.totalCards/2);
             //calls for a dynamic card creation  * use the randomCardArray function to create such an array
-            Game.dynamicCardCreate(Game.randomCardArray(Data.totalCards / 2, Data.item_list));
+            Game.dynamicCardCreate(Game.randomCardArray(Data.totalCards / 2, Game.takefromArray(9,Data.item_list)));
         }
     },
     //create card divs with img src in the order of a number array
@@ -513,12 +513,28 @@ Game = {
             }
         }
     },
+    takefromArray:function(num, pics){
+        var picsalter = [];
+        for(var i = 0; i < pics.length; i++){
+            picsalter.push(pics[i])
+        }
+        console.log(picsalter);
+        var piclist = [];
+        var picslen = num;
+        for(var i = 0; i < picslen; i++){
+            var curlen = picsalter.length;
+            var random = Math.floor(Math.random() * curlen);
+            var temp = ((picsalter.splice(random, 1)));
+            piclist.push(temp[0]);
+        }
+
+        return piclist;
+    },
     //take in an array of images doubles and randomizes them;
     randomCardArray: function(num, items){
         console.log("randomCardArray array:", num, items);
-        pics = [];
+        var pics = [];
         for(var i = 0; i < num ; i++){
-            
             pics.push(items[i]);
             pics.push(items[i]);
         }
