@@ -28,15 +28,7 @@ Game = {
     //assign clicks to buttons and card backs;
     btnMaker: function(){
         //Card Clicked if second_card_clicked -> card_clicked  else shake card
-        $(".back").click(function(){
-            //console.log("clicked a" , this);
-            if(!Data.second_card_clicked){
-                Game.card_clicked(this);
-            }
-            else{
-                $(this).parent().effect("shake");
-            }
-        })
+       Game.cardBackClick();
         //THE RESET BUTTON
         $(".reset").click(function(){
             //console.log("clicked", this);
@@ -48,17 +40,32 @@ Game = {
             Game.createMortyMatch(Data.mortyInit);
             Data.score = 0;
             Game.resetDataFlags();
-            Game.btnMaker();
+            Game.cardBackClick();
         })
     },
+    cardBackClick: function(){
+        //Card Clicked if second_card_clicked -> card_clicked  else shake card
+        $(".back").click(function(){
+            //console.log("clicked a" , this);
+            if(!Data.second_card_clicked){
+                Game.card_clicked(this);
+            }
+            else{
+                $(this).parent().effect("shake");
+            }
+        })
+    },
+
     // called when a card is clicked enacts core game logic
     // arguments used (element, boolean)  targ element card and if 2nd card clicked
     card_clicked: function(targ){
+        //$(targ).addClass("flip");
+        $(targ).toggle();
         //if first_card_clicked is false flip this card and store this element and toggle first_card_clicked to true
         if(!Data.first_card_clicked){
-            $(targ).addClass("flip");
-            Data.firstcardid = targ;
-            Data.first_card_clicked = true;
+            Data.first_card_clicked = targ;
+
+
         }
         //if first_card_clicked compareCards
         else{
@@ -70,10 +77,12 @@ Game = {
         Data.second_card_clicked = true;
         $(targ).addClass("flip");
         //The card src images are not equal -> use Timeout to delay a flip back and reset data variables and wait for click
-        if($(targ).siblings( ".front").find("img").attr("src") != $(Data.firstcardid).siblings( ".front").find("img").attr("src")){
+        if($(targ).siblings( ".front").find("img").attr("src") != $(Data.first_card_clicked).siblings( ".front").find("img").attr("src")){
             setTimeout(function(){
                 $(targ).removeClass("flip");
-                $(Data.firstcardid).removeClass("flip");
+                $(Data.first_card_clicked).removeClass("flip");
+                $(targ).toggle();
+                $(Data.first_card_clicked).toggle();
                 Game.resetDataFlags();
             }, 2000);
         }
@@ -103,12 +112,12 @@ Game = {
     //animate an elements sibling
     animate: function(element){
         $(element).siblings(".front").animate({bottom: "-=200px"}, 800).fadeOut(800);
-        $(Data.firstcardid).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
+        $(Data.first_card_clicked).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
     },
     // reset the card click and id values
     resetDataFlags: function(){
         Data.second_card_clicked = null;
-        Data.firstcardid = null;
+        Data.first_card_clicked = null;
         Data.first_card_clicked = null;
     },
     //Below is for creating cards dynamically ignore
