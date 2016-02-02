@@ -10,7 +10,7 @@ $(document).ready(function() {
     //create reset btn
     Game.mortyInit();
     Game.display_stats();
-    Game.modal();
+    Game.modalActive();
 });
 
 //game variable storage
@@ -38,7 +38,7 @@ Data = {
     portalReady: true,
     portalFuel: 210,
     morties_collected: [],
-    items_collected: [],
+    backpack: { hp: 0, },
     item_list: ["morty1.png","morty2.png","morty3.png","morty4.png","morty5.png",
         "morty6.png","morty7.png","morty8.png","morty9.png"],
     morty_list: ["trueMorty","roboMorty","cyclopsMorty","rainbowMorty","businessMorty",
@@ -64,14 +64,45 @@ Data = {
         world5: ["<div>  its world5!!</div>", "world5"],
         world6: ["<div>  its world6!</div>", "world6"],
         world7: ["<div>  its world7!</div>", "world7", 7]
+    },
+    shops: [],
+    Shop: function(items, mortys){
+        var mortyStock = Data.morty_list;
+        var itemStock = ["health","stamina","kombobulators", "magic beans"];
+        var shopName = ["NeutrinoMart", "Flips n Bitz","RickMart","Big and Bird", "TinyFood"];
+        this.name = Game.randomPick(shopName, 1);
+        this.item = Game.randomPick(itemStock, items);
+        this.morty = Game.randomPick(mortyStock, mortys);
+        this.mcost = Game.randomRange(50, 400);
+    },
+    missions: [],
+    Mission: function(item){
+        //mortyStock = Data.morty_list;
+        itemStock = ["health","stamina","kombobulators", "magic beans"];
+        missionName = ["a Morty in Need", "Warrior Trials","Magical Being","Visit Birdworld", "Steal Food"];
+        this.name = Game.randomPick(missionName, 1);
+        //this.item = Game.randomPick(itemStock, items);
     }
 }
+
 //game logic "engine" functions
 Game = {
     mortyInit: function(){
         var world = Data.worlds.world0;
         $("#game-area").addClass(world[1]).append(world[0]);
         Game.sideBtnMaker();
+    },
+    randomRange : function(min, max){
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    randomPick: function(arry,num){
+        var newarry = [];
+        var random;
+        for(var i = 0; i < num; i++){
+            random = Math.floor(Math.random() * arry.length);
+            newarry.push(arry[random]);
+        }
+        return newarry;
     },
     //assign clicks to buttons and card backs;
     btnBackMaker: function(){
@@ -102,7 +133,7 @@ Game = {
             if(Data.portalReady && Game.fuelCheck()){
                 Game.portalRandom(Data.currentworld);
                 Game.reset_stats();
-                Game.missionCreate();
+                Game.createMission(2);
             }
         })
         //activate portal to the market;
@@ -119,25 +150,16 @@ Game = {
                 Game.portalPlace(Data.currentworld, Data.worlds.world7);
             }
         })
+        $("#btnMode1").click(function(){
+            Game.modalActive("mode1");
+        })
         //activate to flip board cheat;
         $(".btnflip").click(function(){
             Game.flipEverything(1000);
         })
     },
     //start mission phase after portal to a world
-    missionCreate: function(){
-        var btn = $("<button>").text("choice a").addClass("complete");
-        var divo = $("<div>").append(btn);
-        $("#game-area").append(divo);
-        Game.missionBtn();
-    },
-    //creates mission choice buttons;
-    missionBtn: function(){
-        $(".complete").click(function(){
-            console.log("complete was made!");
-            Game.missionComplete(3);
-        })
-    },
+
     //activate to finish a mission and start morty match reward phase
     missionComplete: function(num){
       $("#game-area").html("");
@@ -166,6 +188,7 @@ Game = {
     },
     //portal to random world takes previous world int to compare and go to different world
     portalRandom: function(previousWorld){
+        Game.clearGameArea();
         //remove previous world class
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
@@ -182,6 +205,7 @@ Game = {
     },
     //portal to a specific world
     portalPlace: function(previousWorld, destination){
+        Game.clearGameArea();
         //check previous world and remove class
         var world = Data.worlds["world" + previousWorld];
         $("#game-area").removeClass(world[1]);
@@ -189,6 +213,84 @@ Game = {
         world = destination;
         Data.currentworld = world[2];
         $("#game-area").addClass(world[1]).append(world[0]);
+        console.log(world[1]);
+        if(world[1] == "world0"){
+            console.log("opening market");
+            Game.openMarket(Game.randomRange(1,2));
+        }
+    },
+    createMission: function(num){
+        var ritem;
+        for(var i = 0; i < num; i++){
+            //ritem = Math.floor(Math.random() * 6) + 1;
+            Data.missions.push(new Data.Mission());
+        }
+        Game.appendMissions();
+    },
+    appendMissions: function(){
+        var mission;
+        for(var i = 0; i < Data.missions.length; i++){
+            mission = Data.missions[i];
+            //append shop Icons
+            $("<div>", {
+                class: "people",
+                attr: { onclick: "Game.modalActive('mode" + i + "');"},
+                html: "<img src='image/me.jpg'>" + mission.name
+            }).appendTo("#game-area");
+            //append shop name to first modal;
+            $("#mode" + i + " h2").text(mission.name);
+            $("#mode" + i + " .modal-body").html("<button class='close' onclick='Game.missionComplete()'>Completed!!</button>");
+            //append a list of items in the shop
+            //var items = $("<ul>");
+            //var body = $("#mode" + i + " .modal-body");
+
+            //for(var j = 0; j < shop.item.length; j++){
+            //    var x = $("<li>").text(shop.item[j]);
+            //    items.append(x);
+            //}
+            //body.append(items);
+        }
+    },
+    openMarket: function(num){
+        var ritem;
+        var rmorty;
+        for(var i = 0; i < num; i++){
+            rmorty = Math.floor(Math.random() * 2);
+            ritem = Math.floor(Math.random() * 6) + 1;
+            Data.shops.push(new Data.Shop(ritem, rmorty));
+        }
+        Game.appendMarket();
+    },
+    appendMarket: function(){
+        var shop;
+        for(var i = 0; i < Data.shops.length; i++){
+            shop = Data.shops[i];
+            //append shop Icons
+            $("<div>", {
+                class: "people",
+                attr: { onclick: "Game.modalActive('mode" + i + "');"},
+                html: "<img src='image/me.jpg'>" + shop.name
+            }).appendTo("#game-area");
+            //append shop name to first modal;
+            $("#mode" + i + " h2").text(shop.name);
+            //append a list of items in the shop
+            var items = $("<ul>");
+            var body = $("#mode" + i + " .modal-body");
+
+            for(var j = 0; j < shop.item.length; j++){
+                var x = $("<li>").text(shop.item[j]);
+                items.append(x);
+            }
+            body.append(items);
+        }
+    },
+    clearGameArea: function(){
+        Data.missions = [];
+        Data.shops = [];
+        $(".modal-header").html("<span class='close'>×</span> <h2></h2>");
+        $(".modal-body").html("");
+        $(".modal-footer").html("<h3></h3>");
+        $("#game-area").html("");
     },
     //check portal gun charges
     fuelCheck: function(){
@@ -413,26 +515,43 @@ Game = {
         $("<option>").text(mortyName).appendTo("#mortydex");
         console.log(Data.morties_collected);
     },
-    modal: function(){
-        var inventory = $('#mortyBag');
-        var btn = $("#inventory");
+    modalActive: function(modeid){
+        console.log(modeid);
+        var modal = $("#" + modeid);
         var span = $(".close");
-        $(btn).click(function() {
-            inventory.css("display","block");
-        })
-// When the user clicks on <span> (x), close the inventory
-        $(span).click(function() {
-            inventory.css( "display", "none");
-        });
-// When the user clicks anywhere outside of the inventory, close it
-        $(window).click(function(event) {
-            console.log(event.target);
-            if (event.target == inventory.html) {
-                inventory.css( "display", "none");
-            }
-        });
-    }
+        modal.css("display" , "block");
+       // var modal2 = $('#mode2');
+       // var btn1 = $("#btnMode1");
+       // var btn2 = $("#btnMode2");
 
+       //var window1 = document.getElementById(modeid);
+       // var window2 = document.getElementById('mode2');
+       // $(btn1).click(function() {
+       //     modal1.css("display","block");
+       // });
+       // $(btn2).click(function() {
+       //     modal2.css("display","block");
+       // });
+       // // close the inventory
+        $(span).click(function() {
+           close();
+        });
+       // // TODO: fix When the user clicks anywhere outside of the inventory, close it
+       // window.addEventListener("click", checkwindow);
+       //
+       // function checkwindow(event) {
+       //     console.log(event.target);
+       //     if (event.target == window1) {
+       //         close();
+       //     }
+       // }
+
+        function close(){
+            modal.css( "display", "none");
+           // window.removeEventListener("click", checkwindow);
+        }
+
+    }
 
 }
 
