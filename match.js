@@ -97,6 +97,7 @@ Match = {
 
         $(".attempts").find(".value").text(Data.attempts);
         $(".currency").find(".value").text("$" + Data.flurbos);
+        $(".flurbs").text("$" + Data.flurbos);
         $(".fuel").find(".value").text(Data.portalFuel);
         $(".matches").find(".value").text(Data.matches);
         $(".accuracy").find(".value").text(Data.accuracy);

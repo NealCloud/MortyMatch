@@ -22,7 +22,7 @@ Data = {
     mortyInit: null,
     gameBoard: null,
     //Stats
-    flurbos: 200,
+    flurbos: 8000,
     currentworld: 0,
     matches: 0,
     totalCards: 18,
@@ -68,6 +68,13 @@ Data = {
         world5: ["<div>  its world5!!</div>", "world5"],
         world6: ["<div>  its world6!</div>", "world6"],
         world7: ["<div>  its world7!</div>", "world7", 7]
+    },
+    itemcost: {
+        health: 200,
+        stamina: 200,
+        kombobulators: 200,
+        "magic beans": 500,
+        "PortalGun Charger": 1000
     },
     shops: [],
     Shop: function(items, mortys){
@@ -152,7 +159,7 @@ Game = {
             $("#game-area").html("");
             Data.matches = 0;
             Data.games_played += Data.attempts > 0 ? 1: 0;
-            Game.reset_stats();
+            Match.reset_stats();
             $('.timer .value').text("0");
         })
         //activates portal to random place;
@@ -296,6 +303,7 @@ Game = {
     },
     appendMarket: function(){
         var shop;
+        $(".flurbs").text("$ " + Data.flurbos);
         for(var i = 0; i < Data.shops.length; i++){
             shop = Data.shops[i];
             //append shop Icons
@@ -313,31 +321,44 @@ Game = {
 
             for(var j = 0; j < shop.item.length; j++){
                 var x = $("<li>").text(shop.item[j]);
-                Game.createBuy(x, shop.item[j]);
+                Game.createBuy(x, shop.item[j], 100);
+                console.log(Data.itemcost[shop.item[j]]);
                 items.append(x);
             }
             if(shop.morty.length) {
                 var mort = $("<li>",{
                     html : "<img src='image/" + Data.morty_dex[shop.morty].src + "'> I'm also trying to get rid of this " + shop.morty
                 });
-                Game.createBuy(mort, shop.morty);
+                Game.createBuy(mort, shop.morty, shop.mcost);
                 mort.appendTo(footer);
             }
             body.append(items);
         }
     },
-    createBuy: function(element, item){
+    createBuy: function(element, item, cost){
       element.click(function(){
         console.log("clicked " + item);
-        this.remove();
-      })
+          if(Data.flurbos > cost){
+              Data.flurbos -= cost;
 
+              this.remove();
+              Game.buyItem(item, cost);
+          }
+          else{
+              console.log("not enough flurbos");
+          }
+      })
+    },
+    buyItem: function(item, cost){
+
+        Match.reset_stats();
+        console.log(item);
     },
     clearGameArea: function(){
         Data.missions = [];
         Data.shops = [];
         $(".modal-header").html("<span class='close'>×</span> <h2></h2>");
-        $(".modal-body").html("");
+        $(".modal-body").html(" <h4 class='flurbs'></h4>");
         $(".modal-footer").html("<h3></h3>");
         $("#game-area").html("");
     },
