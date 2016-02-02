@@ -8,6 +8,7 @@ $(document).ready(function() {
     //create a click event on all card backs
    // Game.btnBackMaker();
     //create reset btn
+    Data.portalReady = false;
     Game.mortyInit();
     Game.display_stats();
     Game.modalActive();
@@ -80,11 +81,9 @@ Data = {
     },
     missions: [],
     Mission: function(item){
-        //mortyStock = Data.morty_list;
-        itemStock = ["health","stamina","kombobulators", "magic beans"];
         missionName = ["a Morty in Need", "Warrior Trials","Magical Being","Visit Birdworld", "Steal Food"];
         this.name = Game.randomPick(missionName, 1);
-        //this.item = Game.randomPick(itemStock, items);
+        this.difficulty = Game.randomRange(0,10);
     }
 }
 
@@ -118,7 +117,7 @@ Game = {
             class: "people",
             html: "<img src='image/me.jpg'> Excellent Choice Now head out and collect more mortys"
         }).appendTo("#game-area");
-
+        Data.portalReady = true;
     },
     randomRange : function(min, max){
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -257,12 +256,19 @@ Game = {
         Game.appendMissions();
     },
     appendMissions: function(){
-        var mission;
+        var mission, difficulty;
         for(var i = 0; i < Data.missions.length; i++){
             mission = Data.missions[i];
+            if(mission.difficulty < 4){
+                difficulty = "easy";
+            }
+            else if(mission.difficulty < 7){
+                difficulty = "medium";
+            }
+            else difficulty = "hard";
             //append shop Icons
             $("<div>", {
-                class: "people",
+                class: "people " + difficulty,
                 attr: { onclick: "Game.modalActive('mode" + i + "');"},
                 html: "<img src='image/me.jpg'>" + mission.name
             }).appendTo("#game-area");
@@ -272,7 +278,6 @@ Game = {
             //append a list of items in the shop
             //var items = $("<ul>");
             //var body = $("#mode" + i + " .modal-body");
-
             //for(var j = 0; j < shop.item.length; j++){
             //    var x = $("<li>").text(shop.item[j]);
             //    items.append(x);
@@ -370,7 +375,9 @@ Game = {
         }
         //The cards are equal -> add morty to pokedex and move to matchedCards function to check if game won
         else{
-            var firstNum = /image/.exec(firstSrc)[0];
+            var firstNum = /\/(.+)\.png$/gm.exec(firstSrc)[1];
+            console.log(firstNum);
+            console.log(firstSrc);
             Game.addMorty(firstNum);
             Game.matchedCards(card);
         }
@@ -511,6 +518,7 @@ Game = {
         console.log("randomCardArray array:", num, items);
         pics = [];
         for(var i = 0; i < num ; i++){
+            
             pics.push(items[i]);
             pics.push(items[i]);
         }
