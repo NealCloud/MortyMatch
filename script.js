@@ -2,9 +2,11 @@
  * Created by Mad Martigan on 1/28/2016.
  */
 $(document).ready(function() {
-    // initialize game creating the board game with a randomly generated cardset or
-
+    // initialize game creating the board game with a randomly generated cardset or preset array
+    //randomMorty function returns a randomized array of numbers and their duplicates
+    //accepts an integer between 1 - 9;
     Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+    //
     Game.createMortyMatch(Data.mortyInit);
     //create a click event on all card backs
     //Game.btnBackMaker();
@@ -34,7 +36,6 @@ Data = {
             "<img src='image/" + back + "' alt='cardback'>" +
             "</div>"
         });
-
         this.image = "image/morty" + imgNum + ".png";
     }
 }
@@ -162,7 +163,8 @@ Game = {
     },
     //create card divs with img src in the order of a number array
     dynamicCardCreate : function(numberArray, back){
-        for (var i = 0; i < numberArray.length; i++) {
+        var total = numberArray.length / 2;
+        for (var i = 0; i < total; i++) {
             for (var j = 0; j < 2; j++) {
                 var img = numberArray.pop();
                 var card = new Data.Card(img, back);
@@ -170,10 +172,15 @@ Game = {
             }
         }
     },
-    //returns an array of predefined numbers in a random order;
-    randomMorty: function(num){
+    //returns an array of predefined numbers in a random order between 1-9;
+    randomMorty: function(cardinput){
+        var cards;
+        if(cardinput > 0 && cardinput < 10){
+            cards = cardinput;
+        }
+        else cards = 9;
         pics = [];
-        for(var i = 1; i < num + 1; i++){
+        for(var i = 1; i < cards + 1; i++){
             pics.push(i);
             pics.push(i);
         }
@@ -187,7 +194,7 @@ Game = {
             var temp = ((pics.splice(num, 1)));
             randomnums.push(temp[0]);
         }
-        //console.log(randomnums);
+        console.log(randomnums);
         return randomnums;
     }
 }
