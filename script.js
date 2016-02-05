@@ -156,47 +156,62 @@ Game = {
     },
     //Below is for creating cards dynamically ignore
 // dan start
-    createMortyMatch : function(picIdarray) {
-        console.log(picIdarray);
-        //calls for a dynamic card creation  * use the randomMorty function to create such an array
-        Game.dynamicCardCreate(picIdarray, "cardback.png");
-    },
-    //create card divs with img src in the order of a number array
-    dynamicCardCreate : function(numberArray, back){
-        var total = numberArray.length / 2;
-        for (var i = 0; i < total; i++) {
-            for (var j = 0; j < 2; j++) {
-                var img = numberArray.pop();
-                var card = new Data.Card(img, back);
-                $(card.html).appendTo("#game-area");
-            }
-        }
-    },
-    //returns an array of predefined numbers in a random order between 1-9;
-    randomMorty: function(cardinput){
-        var cards;
-        if(cardinput > 0 && cardinput < 10){
-            cards = cardinput;
-        }
-        else cards = 9;
-        pics = [];
-        for(var i = 1; i < cards + 1; i++){
-            pics.push(i);
-            pics.push(i);
-        }
-        //remove to have random card placement
-        //return pics;
-        var randomnums = [];
-        var picslen = pics.length;
-        for(var i = 0; i < picslen; i++){
-            var curlen = pics.length;
-            var num = Math.floor(Math.random() * curlen);
-            var temp = ((pics.splice(num, 1)));
-            randomnums.push(temp[0]);
-        }
-        console.log(randomnums);
-        return randomnums;
-    }
+//   Define function that creates the Morty Match game
+
+        //calls a function that adds cards to the board with number array input and cardback image parameters;
+
+
+    //Define function that adds cards to game board taking in a randomized number array input and cardback image input
+
+        //get total number of cards to make
+
+        //loop through the array
+
+                //pops an item from from the array
+
+                //creates a new card object using the img from the pop and cardbackimg as parameters
+
+                //appends the card to the #game-area
+
+
+    //creates a function that takes in a number and out puts out a random array  between 1-9; ex: input:3 -> [1,1,2,2,3,3] --> [1,2,1,3,2,1,3]
+
+        //create a default var value of 9;
+
+        // if check input is between 1 - 9;
+
+            //assign card to input
+
+
+        //create an empty array for pic index
+
+        //create a loop depending on card number
+
+            //push the number  an array
+
+            //push the number  to an array again
+
+
+        //create another array to hold a randomization of previous array
+
+        //use the first created array as a length check
+
+        //loop through the initial length
+
+            //update the length as it grows shorter
+
+            //create a random number depending on shorter length
+
+            //take out a random item from the first array making it shorter using splice and the random number
+
+            //push the random item that was spliced to the randomized array;
+
+
+        //check out the random array in console
+
+        //return the randomized array for dynamic card creation
+
+
 }
 
 //dan end
