@@ -69,7 +69,7 @@ Game = {
             Data.matches = 0;
             Game.reset_stats();
             Game.resetDataFlags();
-            Game.btnBackMaker();
+            //Game.btnBackMaker();
         })
     },
     // called when a card is clicked enacts core game logic
@@ -155,7 +155,7 @@ Game = {
         Game.display_stats();
     },
     //Below is for creating cards dynamically ignore
-
+// dan start
     createMortyMatch : function(picIdarray) {
         console.log(picIdarray);
         //calls for a dynamic card creation  * use the randomMorty function to create such an array
@@ -199,7 +199,7 @@ Game = {
     }
 }
 
-
+//dan end
 
 
 
