@@ -69,7 +69,7 @@ Game = {
             Data.matches = 0;
             Game.reset_stats();
             Game.resetDataFlags();
-            Game.btnBackMaker();
+            //Game.btnBackMaker();
         })
     },
     // called when a card is clicked enacts core game logic
@@ -163,22 +163,20 @@ Game = {
     },
     //create card divs with img src in the order of a number array
     dynamicCardCreate : function(numberArray, back){
-        var total = numberArray.length / 2;
+        var total = numberArray.length;
         for (var i = 0; i < total; i++) {
-            for (var j = 0; j < 2; j++) {
-                var img = numberArray.pop();
-                var card = new Data.Card(img, back);
-                $(card.html).appendTo("#game-area");
-            }
+            var imgNum = numberArray.pop();
+            var card = new Data.Card(imgNum, back);
+            $(card.html).appendTo("#game-area");
+
         }
     },
     //returns an array of predefined numbers in a random order between 1-9;
     randomMorty: function(cardinput){
-        var cards;
+        var cards = 9;
         if(cardinput > 0 && cardinput < 10){
             cards = cardinput;
         }
-        else cards = 9;
         pics = [];
         for(var i = 1; i < cards + 1; i++){
             pics.push(i);
