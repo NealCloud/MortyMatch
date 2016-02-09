@@ -63,6 +63,7 @@ Match = {
         //not yet won -> increase matches, fade out cards and reset data flag variables and wait for next click
         else{
             Data.matches++;
+            Data.flurbos += 100;
             Match.animate(targ);
             setTimeout(function(){
                 Match.resetDataFlags();
@@ -70,13 +71,14 @@ Match = {
         }
         Match.display_stats();
     },
-    //animate an elements sibling
+    //animates siblings exit
     animate: function(element){
         $(element).siblings(".front").animate({bottom: "-=200px"}, 800).fadeOut(800);
         $(element).html("");
         $(Data.first_card_clicked).siblings(".front").animate({top: "-=200px"}, 800).fadeOut(800);
         $(Data.first_card_clicked).html("");
     },
+    //Flips every card
     flipEverything: function(duration, countdown){
         $(".back").addClass("flip").delay(duration).queue(function(next){
             $(this).removeClass("flip");
