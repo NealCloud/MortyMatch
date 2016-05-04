@@ -17,7 +17,7 @@ A game of matching cards.
  - how to dynamically create/remove DOM elements
 
 ### Live view
-- ![ScreenShot](https://nealcloud.github.io/assets/img/c2.png)
+![ScreenShot](https://nealcloud.github.io/assets/img/c2.png)
 
 ### Version
 1.0
