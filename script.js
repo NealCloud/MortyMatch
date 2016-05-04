@@ -5,13 +5,13 @@ $(document).ready(function() {
     // initialize game creating the board game with a randomly generated cardset or preset array
     //randomMorty function returns a randomized array of numbers and their duplicates
     //accepts an integer between 1 - 9;
-    Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+    Data.mortyInit = MemoryMatch.randomMorty(Data.totalCards/2);
     //
-    Game.createMortyMatch(Data.mortyInit);
+    MemoryMatch.createMortyMatch(Data.mortyInit);
     //create a click event on all card backs
     //Game.btnBackMaker();
     //create reset btn
-    Game.resetBtn();
+    MemoryMatch.resetBtn();
 });
 
 //game variable storage
@@ -32,23 +32,23 @@ Data = {
             html: " <div class='front'>" +
             "<img src='image/morty" + imgNum + ".png' alt='cardfront'>" +
             "</div>" +
-            "<div class='back' onclick='!Data.second_card_clicked ? Game.card_clicked(this) : $(this).parent().effect(\"shake\")' >" +
+            "<div class='back' onclick='!Data.second_card_clicked ? MemoryMatch.card_clicked(this) : $(this).parent().effect(\"shake\")' >" +
             "<img src='image/" + back + "' alt='cardback'>" +
             "</div>"
         });
         this.image = "image/morty" + imgNum + ".png";
     }
-}
+};
 
 //game logic "engine" functions
-Game = {
+MemoryMatch = {
     //assign clicks to buttons and card backs;
     btnBackMaker: function(){
         //Card Clicked if second_card_clicked -> card_clicked  else shake card
         $(".back").click(function(){
             //console.log("clicked a" , this);
             if(!Data.second_card_clicked){
-                Game.card_clicked(this);
+                MemoryMatch.card_clicked(this);
             }
             else{
                 $(this).parent().effect("shake");
@@ -62,13 +62,13 @@ Game = {
             //clear gameboard;
             $("#game-area").html("");
             //checks for premade gameboard otherwise use dynamic function to create
-            Data.mortyInit = Game.randomMorty(Data.totalCards/2);
+            Data.mortyInit = MemoryMatch.randomMorty(Data.totalCards/2);
             //resets the Data vars and initiates game
-            Game.createMortyMatch(Data.mortyInit);
+            MemoryMatch.createMortyMatch(Data.mortyInit);
             Data.games_played += Data.attempts > 0 ? 1:0;
             Data.matches = 0;
-            Game.reset_stats();
-            Game.resetDataFlags();
+            MemoryMatch.reset_stats();
+            MemoryMatch.resetDataFlags();
             //Game.btnBackMaker();
         })
     },
@@ -82,7 +82,7 @@ Game = {
         }
         //if first_card_clicked compareCards
         else{
-            Game.compareCards(targ);
+            MemoryMatch.compareCards(targ);
         }
     },
    //Second card clicked -> (*mouse click disabled) flip second card and set true and flip target card and compare img src
@@ -94,16 +94,16 @@ Game = {
         if($(targ).siblings( ".front").find("img").attr("src") != $(Data.first_card_clicked).siblings( ".front").find("img").attr("src")){
         console.log(Data.second_card_clicked.image)
         //if(targ.image == Data.first_card_clicked.image){
-            Game.display_stats();
+            MemoryMatch.display_stats();
             setTimeout(function(){
                 $(targ).removeClass("flip");
                 $(Data.first_card_clicked).removeClass("flip");
-                Game.resetDataFlags();
-            }, 2000);
+                MemoryMatch.resetDataFlags();
+            }, 1000);
         }
         //The cards are equal -> go to matchedCards function to check if game won
         else{
-           Game.matchedCards(targ);
+           MemoryMatch.matchedCards(targ);
         }
     },
     matchedCards: function(targ){
@@ -111,8 +111,8 @@ Game = {
         //game is won -> clear game board and display win text and wait for reset
 
         if(Data.matches == Data.totalCards / 2 - 1 ){
-            Game.display_stats();
-            Game.animate(targ);
+            MemoryMatch.display_stats();
+            MemoryMatch.animate(targ);
             $("#game-area").html("");
             $("#game-area").append($("<h1>").html("You win").addClass('win'));
 
@@ -120,12 +120,12 @@ Game = {
         //not yet won -> increase matches, fade out cards and reset data flag variables and wait for next click
         else{
             Data.matches++;
-            Game.animate(targ);
+            MemoryMatch.animate(targ);
             setTimeout(function(){
-                Game.resetDataFlags();
+                MemoryMatch.resetDataFlags();
             }, 500);
         }
-        Game.display_stats();
+        MemoryMatch.display_stats();
     },
     //animate an elements sibling
     animate: function(element){
@@ -141,7 +141,7 @@ Game = {
         //check math
         var a = Data.matches;
         var b = Data.attempts;
-        Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0
+        Data.accuracy = ( a != 0 && b != 0) ? Math.floor((a / b) * 100) + "%": 0;
 
         $(".attempts").find(".value").text(Data.attempts);
         $(".matches").find(".value").text(Data.matches);
@@ -152,14 +152,14 @@ Game = {
         Data.accuracy = 0;
         Data.matches = 0;
         Data.attempts = 0;
-        Game.display_stats();
+        MemoryMatch.display_stats();
     },
     //Below is for creating cards dynamically ignore
 
     createMortyMatch : function(picIdarray) {
         console.log(picIdarray);
         //calls for a dynamic card creation  * use the randomMorty function to create such an array
-        Game.dynamicCardCreate(picIdarray, "cardback.png");
+        MemoryMatch.dynamicCardCreate(picIdarray, "cardback.png");
     },
     //create card divs with img src in the order of a number array
     dynamicCardCreate : function(numberArray, back){
