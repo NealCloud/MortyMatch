@@ -2,114 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <style>
-        img {
-            max-width: 100%;
-        }
+    <title>Morty Match</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Margarine' rel='stylesheet' type='text/css'>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
-        .header {
-            padding: 10px;
-            text-align: center;
-        }
-        .header button {
-            border: 2px solid #210908;
-            border-bottom-width: 4px;
-            border-radius: 4px;
-            color: white;
-            background: #5eb851;
-            padding: 5px 20px;
-            font-weight: bold;
-        }
-        .header.modal {
-            position: fixed;
-            z-index: 25;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-        }
-        .header.modal button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            width: 210px;
-            height: 80px;
-            line-height: 28px;
-            font-size: 28px;
-        }
+    <script src="script.js"></script>
 
-        .game {
-            margin: 0 auto;
-            max-width: 680px;
-        }
-        .game *, .game *:before, .game *:after {
-            box-sizing: border-box;
-        }
-        .game:after, .game:before {
-            display: table;
-            content: " ";
-        }
-        .game:after {
-            clear: both;
-        }
-
-        .card-container {
-            float: left;
-            padding: 0 10px;
-            margin-bottom: 10px;
-        }
-
-        .card {
-            perspective: 1000;
-            z-index: 3;
-            cursor: pointer;
-        }
-        .card, .card .front, .card .back {
-            width: 150px;
-            height: 215px;
-        }
-        .card .flipper {
-            transition: 0.6s;
-            transform-style: preserve-3d;
-            position: relative;
-        }
-        .card .front, .card .back {
-            backface-visibility: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .card .front {
-            z-index: 2;
-            transform: rotateY(0deg);
-        }
-        .card .back {
-            transform: rotateY(180deg);
-        }
-        .card.flipped .flipper {
-            transform: rotateY(180deg);
-        }
-    </style>
 </head>
-<body>
-<div class="header">
-    <button onclick="game.reset()">Reset</button>
-</div>
-<div class="game"></div>
-<script src="js/memory.js"></script>
-<script type="text/html" id="cardTemplate">
-    <div class="card-container">
-        <div class="card">
-            <div class="flipper">
-                <div class="front"></div>
-                <div class="back"></div>
+<body class="morty-bg">
+    <!--Flexbox -> Logo / Title / Navbar -->
+    <header class="header">
+        <div class="logo"><img src="image/logo.png" alt=""></div>
+        <h1 class="title">Morty Match</h1>
+        <nav class="navbar">
+            <ul>
+                <li> <a href="#">Settings</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<div class="main-area">
+    <!--Stats Side bar-->
+    <div class="stats-area">
+        <h2>Stats</h2>
+
+        <div class="games-played">
+            <div class="label">Games Played</div>
+            <div class="value">0</div>
+        </div>
+
+        <div class="attempts">
+            <div class="label">Attempts</div>
+            <div class="value">0</div>
+
+        </div>
+
+        <div class="accuracy">
+            <div class="label">Accuracy</div>
+            <div class="value">0</div>
+        </div>
+
+        <button class="reset">Reset Game</button>
+
+    </div>
+    <!--Game Area-->
+    <div id="game-area">
+        <!--6 cards by 3 rows-->
+        <!--cards created in jquery-->
+       <!-- <div class="card">
+            <div class="front">
+                <img src="image/morty1.png" alt="cardfront1">
+            </div>
+            <div class="back">
+                <img src="image/cardback.png" alt="cardback">
             </div>
         </div>
+        <div class="card">
+            <div class="front">
+                <img src="image/morty1.png" alt="cardfront1">
+            </div>
+            <div class="back">
+                <img src="image/cardback.png" alt="cardback">
+            </div>
+        </div>-->
     </div>
-</script>
+</div>
+
 </body>
 </html>
